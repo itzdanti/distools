@@ -11,10 +11,8 @@
 [![GitHub forks](https://img.shields.io/github/forks/itzdanti/distools?style=flat-square&label=forks&color=8a8a99)](https://github.com/itzdanti/distools/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/itzdanti/distools?style=flat-square&label=issues&color=4ade80)](https://github.com/itzdanti/distools/issues)
 [![GitHub license](https://img.shields.io/github/license/itzdanti/distools?style=flat-square&label=license&color=f87171)](LICENSE)
-[![Deployments](https://img.shields.io/github/deployments/itzdanti/distools?label=deploys&style=flat-square&color=5865f2)](https://github.com/itzdanti/distools/deployments)
 [![Contributors](https://img.shields.io/github/contributors/itzdanti/distools?style=flat-square&label=contributors&color=a78bfa)](https://github.com/itzdanti/distools/graphs/contributors)
 [![Last commit](https://img.shields.io/github/last-commit/itzdanti/distools?style=flat-square&label=last%20commit&color=6a6a78)](https://github.com/itzdanti/distools/commits/main)
-[![Sponsors](https://img.shields.io/github/sponsors/itzdanti/distools?style=flat-square&label=sponsors&color=fb7185)](https://github.com/itzdanti/distools/sponsors)
 
 </div>
 
