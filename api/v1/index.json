@@ -1,0 +1,1560 @@
+{
+  "name": "aki's Discord Tools API",
+  "version": "1",
+  "openapi": "/api/v1/openapi.json",
+  "docs": "distools.itzdanti.dev/docs",
+  "client": "/api/v1/client.js",
+  "endpoints": 53,
+  "groups": [
+    {
+      "name": "Text",
+      "endpoints": [
+        {
+          "id": "text.fancy",
+          "method": "GET",
+          "path": "/api/v1/text/fancy",
+          "group": "Text",
+          "summary": "Convert text to a fancy Unicode style",
+          "tools": [
+            "fancy-text"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to convert.",
+              "required": true,
+              "example": "hello"
+            },
+            {
+              "name": "style",
+              "in": "body",
+              "type": "string",
+              "description": "Style id from GET /text/styles.",
+              "default": "bold",
+              "enum": [
+                "bold",
+                "italic",
+                "boldItalic",
+                "script",
+                "fraktur",
+                "frakturSmall",
+                "doubleStruck",
+                "monospace",
+                "circled",
+                "squared",
+                "fullwidth"
+              ],
+              "example": "bold"
+            }
+          ]
+        },
+        {
+          "id": "text.styles",
+          "method": "GET",
+          "path": "/api/v1/text/styles",
+          "group": "Text",
+          "summary": "List every fancy text style",
+          "tools": [
+            "fancy-text"
+          ],
+          "params": []
+        },
+        {
+          "id": "text.zalgo",
+          "method": "GET",
+          "path": "/api/v1/text/zalgo",
+          "group": "Text",
+          "summary": "Add combining characters (zalgo)",
+          "tools": [
+            "zalgo-text"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to stack.",
+              "required": true,
+              "example": "aki"
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "Direction of the marks.",
+              "default": "random",
+              "enum": [
+                "up",
+                "down",
+                "middle",
+                "random",
+                "all"
+              ]
+            },
+            {
+              "name": "amount",
+              "in": "body",
+              "type": "number",
+              "description": "Marks per character.",
+              "default": 1,
+              "example": "3"
+            }
+          ]
+        },
+        {
+          "id": "text.small-caps",
+          "method": "GET",
+          "path": "/api/v1/text/small-caps",
+          "group": "Text",
+          "summary": "Convert text to small caps",
+          "tools": [
+            "small-caps"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to convert.",
+              "required": true,
+              "example": "aki"
+            }
+          ]
+        },
+        {
+          "id": "text.spoiler",
+          "method": "GET",
+          "path": "/api/v1/text/spoiler",
+          "group": "Text",
+          "summary": "Wrap text in Discord spoilers",
+          "tools": [
+            "spoiler-text"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to hide.",
+              "required": true,
+              "example": "secret"
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "line or char.",
+              "default": "line",
+              "enum": [
+                "line",
+                "char"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "text.divider",
+          "method": "GET",
+          "path": "/api/v1/text/divider",
+          "group": "Text",
+          "summary": "Build a text divider",
+          "tools": [
+            "text-divider"
+          ],
+          "params": [
+            {
+              "name": "char",
+              "in": "body",
+              "type": "string",
+              "description": "Character to repeat. Defaults to the first preset.",
+              "example": "─"
+            },
+            {
+              "name": "length",
+              "in": "body",
+              "type": "number",
+              "description": "How many characters.",
+              "default": 40,
+              "example": "60"
+            }
+          ]
+        },
+        {
+          "id": "text.status",
+          "method": "GET",
+          "path": "/api/v1/text/status",
+          "group": "Text",
+          "summary": "Build a Discord custom status",
+          "tools": [
+            "custom-status"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Status text, up to 128 characters.",
+              "example": "focus mode"
+            },
+            {
+              "name": "emoji",
+              "in": "body",
+              "type": "string",
+              "description": "Optional leading emoji. Only added when it is missing.",
+              "enum": [
+                "💻",
+                "🎨",
+                "🎸",
+                "☕",
+                "😴",
+                "🧘",
+                "🥷",
+                "🌱",
+                "🍀",
+                "🌛",
+                "🦄",
+                "🐈",
+                "🐙",
+                "🐛",
+                "⚡",
+                "🔥",
+                "✨",
+                "🚶",
+                "🏃",
+                "🧳",
+                "💻",
+                "✏",
+                "📚",
+                "🖥"
+              ],
+              "example": "💻"
+            }
+          ]
+        },
+        {
+          "id": "text.mentions",
+          "method": "GET",
+          "path": "/api/v1/text/mentions",
+          "group": "Text",
+          "summary": "Build mention strings",
+          "tools": [
+            "mentions"
+          ],
+          "params": [
+            {
+              "name": "type",
+              "in": "body",
+              "type": "string",
+              "description": "Mention type id.",
+              "default": "user",
+              "enum": [
+                "user",
+                "nickname",
+                "role",
+                "channel",
+                "everyone",
+                "here",
+                "stage",
+                "command",
+                "thread",
+                "slash"
+              ]
+            },
+            {
+              "name": "ids",
+              "in": "body",
+              "type": "string",
+              "description": "IDs to wrap.",
+              "required": true,
+              "example": "81384788765712384"
+            }
+          ]
+        },
+        {
+          "id": "text.mention-types",
+          "method": "GET",
+          "path": "/api/v1/text/mention-types",
+          "group": "Text",
+          "summary": "List mention templates",
+          "tools": [
+            "mentions"
+          ],
+          "params": []
+        },
+        {
+          "id": "text.stats",
+          "method": "GET",
+          "path": "/api/v1/text/stats",
+          "group": "Text",
+          "summary": "Word, character and reading stats",
+          "tools": [
+            "word-counter"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to measure.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "id": "text.transform",
+          "method": "GET",
+          "path": "/api/v1/text/transform",
+          "group": "Text",
+          "summary": "Case changes and stylisers",
+          "tools": [
+            "text-transform"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to transform.",
+              "required": true
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "Transform to apply.",
+              "required": true,
+              "enum": [
+                "upper",
+                "lower",
+                "title",
+                "reverse",
+                "spaced",
+                "accent",
+                "outline",
+                "strikethrough",
+                "superscript",
+                "subscript",
+                "escapeSpoiler"
+              ],
+              "example": "title"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IDs",
+      "endpoints": [
+        {
+          "id": "ids.snowflake",
+          "method": "GET",
+          "path": "/api/v1/snowflake",
+          "group": "IDs",
+          "summary": "Decode a snowflake",
+          "tools": [
+            "snowflake"
+          ],
+          "params": [
+            {
+              "name": "id",
+              "in": "query",
+              "type": "string",
+              "required": true,
+              "description": "The snowflake to decode.",
+              "example": "81384788765712384"
+            }
+          ]
+        },
+        {
+          "id": "ids.snowflake-create",
+          "method": "GET",
+          "path": "/api/v1/snowflake/create",
+          "group": "IDs",
+          "summary": "Build a snowflake from a date",
+          "tools": [
+            "snowflake"
+          ],
+          "params": [
+            {
+              "name": "date",
+              "in": "body",
+              "type": "string",
+              "description": "ISO date or timestamp.",
+              "required": true,
+              "example": "2024-01-01T00:00:00Z"
+            },
+            {
+              "name": "worker_id",
+              "in": "body",
+              "type": "number",
+              "description": "Worker id, 0-31.",
+              "default": 1
+            },
+            {
+              "name": "process_id",
+              "in": "body",
+              "type": "number",
+              "description": "Process id, 0-31.",
+              "default": 0
+            },
+            {
+              "name": "increment",
+              "in": "body",
+              "type": "number",
+              "description": "Increment, 0-1023.",
+              "default": 0
+            }
+          ]
+        },
+        {
+          "id": "ids.mock",
+          "method": "GET",
+          "path": "/api/v1/ids/mock",
+          "group": "IDs",
+          "summary": "Generate fake snowflakes",
+          "tools": [
+            "mock-ids"
+          ],
+          "params": [
+            {
+              "name": "count",
+              "in": "body",
+              "type": "number",
+              "description": "How many to generate.",
+              "default": 5,
+              "example": "10"
+            },
+            {
+              "name": "kind",
+              "in": "body",
+              "type": "string",
+              "description": "What the ids are for. Only changes the wording, never the format.",
+              "default": "user",
+              "enum": [
+                "user",
+                "message",
+                "role"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Discord",
+      "endpoints": [
+        {
+          "id": "ids.user",
+          "method": "GET",
+          "path": "/api/v1/discord/users/:id",
+          "group": "Discord",
+          "summary": "Look up a user",
+          "tools": [
+            "profile-viewer",
+            "account-age",
+            "pfp-grabber",
+            "banner-grabber",
+            "badge-checker"
+          ],
+          "params": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "User ID, or any string containing one.",
+              "example": "81384788765712384"
+            }
+          ]
+        },
+        {
+          "id": "ids.guild",
+          "method": "GET",
+          "path": "/api/v1/discord/guilds/:id",
+          "group": "Discord",
+          "summary": "Look up a server",
+          "tools": [
+            "server-lookup"
+          ],
+          "params": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Guild ID, invite code or discord.gg link.",
+              "example": "197038439483310086"
+            }
+          ]
+        },
+        {
+          "id": "ids.invite",
+          "method": "GET",
+          "path": "/api/v1/discord/invites/:code",
+          "group": "Discord",
+          "summary": "Look up an invite",
+          "tools": [
+            "invite-info"
+          ],
+          "params": [
+            {
+              "name": "code",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Invite code or full discord.gg link.",
+              "example": "discord"
+            }
+          ]
+        },
+        {
+          "id": "ids.emoji",
+          "method": "GET",
+          "path": "/api/v1/discord/emojis/:id",
+          "group": "Discord",
+          "summary": "Look up an emoji",
+          "tools": [
+            "emoji-downloader"
+          ],
+          "params": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Emoji ID.",
+              "example": "1234567890123456789"
+            }
+          ]
+        },
+        {
+          "id": "ids.snowflake-exists",
+          "method": "GET",
+          "path": "/api/v1/discord/snowflakes/:id",
+          "group": "Discord",
+          "summary": "Check whether a snowflake is a real user",
+          "tools": [
+            "snowflake",
+            "id-finder"
+          ],
+          "params": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Snowflake to check.",
+              "example": "81384788765712384"
+            }
+          ]
+        },
+        {
+          "id": "dev.badges",
+          "method": "GET",
+          "path": "/api/v1/badges",
+          "group": "Discord",
+          "summary": "List every user badge",
+          "tools": [
+            "badge-library",
+            "badge-checker"
+          ],
+          "params": []
+        }
+      ]
+    },
+    {
+      "name": "Invites",
+      "endpoints": [
+        {
+          "id": "invites.extract",
+          "method": "GET",
+          "path": "/api/v1/invites/extract",
+          "group": "Invites",
+          "summary": "Pull the code out of an invite link",
+          "tools": [
+            "invite-builder",
+            "invite-info"
+          ],
+          "params": [
+            {
+              "name": "url",
+              "in": "query",
+              "type": "string",
+              "required": true,
+              "description": "Any invite link or bare code.",
+              "example": "https://discord.gg/aki"
+            }
+          ]
+        },
+        {
+          "id": "invites.images",
+          "method": "GET",
+          "path": "/api/v1/invites/images",
+          "group": "Invites",
+          "summary": "Resolve a server icon and banner from an invite",
+          "tools": [
+            "invite-images"
+          ],
+          "params": [
+            {
+              "name": "code",
+              "in": "query",
+              "type": "string",
+              "required": true,
+              "description": "Invite code or full discord.gg link.",
+              "example": "aki"
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "string",
+              "description": "CDN size. 16 to 4096.",
+              "default": "1024"
+            }
+          ]
+        },
+        {
+          "id": "invites.build",
+          "method": "GET",
+          "path": "/api/v1/invites/build",
+          "group": "Invites",
+          "summary": "Validate invite options and build the query string",
+          "tools": [
+            "invite-builder"
+          ],
+          "params": [
+            {
+              "name": "channel_id",
+              "in": "body",
+              "type": "string",
+              "description": "Channel the invite points at.",
+              "required": true,
+              "example": "197038439483310086"
+            },
+            {
+              "name": "guild_id",
+              "in": "body",
+              "type": "string",
+              "description": "Guild ID, for the invite payload."
+            },
+            {
+              "name": "max_age",
+              "in": "body",
+              "type": "number",
+              "description": "Seconds before expiry.",
+              "default": 86400,
+              "example": "3600"
+            },
+            {
+              "name": "max_uses",
+              "in": "body",
+              "type": "number",
+              "description": "0 is unlimited.",
+              "default": 0
+            },
+            {
+              "name": "temporary",
+              "in": "body",
+              "type": "boolean",
+              "description": "Members get the Temporary Membership flag.",
+              "default": false
+            },
+            {
+              "name": "unique",
+              "in": "body",
+              "type": "boolean",
+              "description": "Force a new code.",
+              "default": true
+            },
+            {
+              "name": "target_type",
+              "in": "body",
+              "type": "string",
+              "description": "1 stream, 2 embedded application."
+            },
+            {
+              "name": "target_id",
+              "in": "body",
+              "type": "string",
+              "description": "Target application or stream ID."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "endpoints": [
+        {
+          "id": "webhooks.payload",
+          "method": "GET",
+          "path": "/api/v1/webhooks/payload",
+          "group": "Webhooks",
+          "summary": "Build and validate a webhook payload",
+          "tools": [
+            "embed-builder"
+          ],
+          "params": [
+            {
+              "name": "username",
+              "in": "body",
+              "type": "string",
+              "description": "Webhook username override."
+            },
+            {
+              "name": "avatar_url",
+              "in": "body",
+              "type": "string",
+              "description": "Webhook avatar override."
+            },
+            {
+              "name": "content",
+              "in": "body",
+              "type": "string",
+              "description": "Message content."
+            },
+            {
+              "name": "include_content",
+              "in": "body",
+              "type": "boolean",
+              "description": "Always include an empty content field.",
+              "default": false
+            },
+            {
+              "name": "thread_id",
+              "in": "body",
+              "type": "string",
+              "description": "Send into a thread."
+            },
+            {
+              "name": "embed",
+              "in": "body",
+              "type": "object",
+              "description": "Embed object: title, description, color, fields and so on."
+            }
+          ]
+        },
+        {
+          "id": "webhooks.limits",
+          "method": "GET",
+          "path": "/api/v1/webhooks/limits",
+          "group": "Webhooks",
+          "summary": "Embed and webhook limits",
+          "tools": [
+            "embed-builder"
+          ],
+          "params": []
+        },
+        {
+          "id": "webhooks.rpc",
+          "method": "GET",
+          "path": "/api/v1/webhooks/rpc",
+          "group": "Webhooks",
+          "summary": "Build a rich presence payload",
+          "tools": [
+            "rpc-preview"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Main text, what you are doing.",
+              "required": true,
+              "example": "Baldur's Gate 3"
+            },
+            {
+              "name": "verb",
+              "in": "body",
+              "type": "string",
+              "description": "Which activity type to use.",
+              "default": "playing",
+              "enum": [
+                "playing",
+                "listening",
+                "watching",
+                "streaming"
+              ]
+            },
+            {
+              "name": "state",
+              "in": "body",
+              "type": "string",
+              "description": "Optional second line."
+            },
+            {
+              "name": "started_at",
+              "in": "body",
+              "type": "number",
+              "description": "Epoch milliseconds, for the elapsed clock."
+            },
+            {
+              "name": "large_image",
+              "in": "body",
+              "type": "string",
+              "description": "Application icon key or URL."
+            },
+            {
+              "name": "small_image",
+              "in": "body",
+              "type": "string",
+              "description": "Secondary icon key or URL."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Permissions",
+      "endpoints": [
+        {
+          "id": "permissions.compute",
+          "method": "GET",
+          "path": "/api/v1/permissions",
+          "group": "Permissions",
+          "summary": "Convert permission names to an integer, or back",
+          "tools": [
+            "permission-calculator"
+          ],
+          "params": [
+            {
+              "name": "permissions",
+              "in": "body",
+              "type": "string",
+              "description": "Permission names, comma separated. Case and spacing do not matter.",
+              "example": "View Channel,Send Messages"
+            },
+            {
+              "name": "integer",
+              "in": "body",
+              "type": "string",
+              "description": "Decimal, 0x hex or 0b binary integer."
+            }
+          ]
+        },
+        {
+          "id": "permissions.list",
+          "method": "GET",
+          "path": "/api/v1/permissions/all",
+          "group": "Permissions",
+          "summary": "Every permission with its bit",
+          "tools": [
+            "permission-calculator"
+          ],
+          "params": []
+        }
+      ]
+    },
+    {
+      "name": "Emoji",
+      "endpoints": [
+        {
+          "id": "emoji.library",
+          "method": "GET",
+          "path": "/api/v1/emojis",
+          "group": "Emoji",
+          "summary": "Search the built-in emoji library",
+          "tools": [
+            "emoji-library"
+          ],
+          "params": [
+            {
+              "name": "q",
+              "in": "query",
+              "type": "string",
+              "description": "Match against name, character or keywords.",
+              "example": "cat"
+            },
+            {
+              "name": "category",
+              "in": "query",
+              "type": "string",
+              "description": "Category id.",
+              "enum": [
+                "Smileys",
+                "Gestures",
+                "People",
+                "Animals",
+                "Food",
+                "Activity",
+                "Travel",
+                "Objects",
+                "Symbols",
+                "Flags"
+              ]
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "type": "number",
+              "description": "Maximum results, 1-500.",
+              "default": 100
+            }
+          ]
+        },
+        {
+          "id": "emoji.categories",
+          "method": "GET",
+          "path": "/api/v1/emojis/categories",
+          "group": "Emoji",
+          "summary": "List emoji categories",
+          "tools": [
+            "emoji-library"
+          ],
+          "params": []
+        },
+        {
+          "id": "emoji.color-text",
+          "method": "GET",
+          "path": "/api/v1/emoji/color-text",
+          "group": "Emoji",
+          "summary": "Get coloured text, or find out why you cannot",
+          "tools": [
+            "color-text"
+          ],
+          "params": [
+            {
+              "name": "text",
+              "in": "body",
+              "type": "string",
+              "description": "Text to colour.",
+              "required": true,
+              "example": "coloured text"
+            },
+            {
+              "name": "hex",
+              "in": "body",
+              "type": "string",
+              "description": "Colour as a hex string.",
+              "required": true,
+              "example": "#5865f2"
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "embed for the payload a bot posts, blocks for the decoration.",
+              "default": "embed",
+              "enum": [
+                "embed",
+                "blocks"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Developer",
+      "endpoints": [
+        {
+          "id": "codecs.base64",
+          "method": "GET",
+          "path": "/api/v1/base64",
+          "group": "Developer",
+          "summary": "Base64 encode or decode",
+          "tools": [
+            "base64"
+          ],
+          "params": [
+            {
+              "name": "input",
+              "in": "body",
+              "type": "string",
+              "description": "Value to convert.",
+              "required": true,
+              "example": "hello"
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "encode, decode, encodeUrl or decodeUrl.",
+              "default": "encode",
+              "enum": [
+                "encode",
+                "decode",
+                "encodeUrl",
+                "decodeUrl"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "codecs.url",
+          "method": "GET",
+          "path": "/api/v1/url",
+          "group": "Developer",
+          "summary": "Percent-encode or decode a URL component",
+          "tools": [
+            "url-encoder"
+          ],
+          "params": [
+            {
+              "name": "input",
+              "in": "body",
+              "type": "string",
+              "description": "Value to convert.",
+              "required": true,
+              "example": "a b&c"
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "encode, decode or component.",
+              "default": "encode",
+              "enum": [
+                "encode",
+                "decode",
+                "component"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dev.json",
+          "method": "GET",
+          "path": "/api/v1/json",
+          "group": "Developer",
+          "summary": "Format, minify or validate JSON",
+          "tools": [
+            "json-tool"
+          ],
+          "params": [
+            {
+              "name": "input",
+              "in": "body",
+              "type": "string",
+              "description": "JSON text.",
+              "required": true,
+              "example": "{\"b\":1,\"a\":2}"
+            },
+            {
+              "name": "mode",
+              "in": "body",
+              "type": "string",
+              "description": "What to do with it.",
+              "default": "pretty",
+              "enum": [
+                "pretty",
+                "minify",
+                "validate",
+                "escape",
+                "unescape"
+              ]
+            },
+            {
+              "name": "indent",
+              "in": "body",
+              "type": "number",
+              "description": "Spaces per level for pretty mode.",
+              "default": 2
+            },
+            {
+              "name": "sort_keys",
+              "in": "body",
+              "type": "boolean",
+              "description": "Sort object keys recursively.",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "dev.uuid",
+          "method": "GET",
+          "path": "/api/v1/uuid",
+          "group": "Developer",
+          "summary": "Generate v4 UUIDs",
+          "tools": [
+            "uuid-generator"
+          ],
+          "params": [
+            {
+              "name": "count",
+              "in": "query",
+              "type": "number",
+              "description": "How many, 1-100.",
+              "default": 1,
+              "example": "5"
+            }
+          ]
+        },
+        {
+          "id": "dev.color",
+          "method": "GET",
+          "path": "/api/v1/color",
+          "group": "Developer",
+          "summary": "Convert a colour between every format",
+          "tools": [
+            "color-converter",
+            "hex-color-picker",
+            "role-color-preview"
+          ],
+          "params": [
+            {
+              "name": "hex",
+              "in": "body",
+              "type": "string",
+              "description": "Hex colour, with or without the #.",
+              "example": "#5865f2"
+            },
+            {
+              "name": "rgb",
+              "in": "body",
+              "type": "string",
+              "description": "RGB string or object.",
+              "example": "88, 101, 242"
+            },
+            {
+              "name": "hsl",
+              "in": "body",
+              "type": "string",
+              "description": "HSL string or object.",
+              "example": "235, 86%, 65%"
+            }
+          ]
+        },
+        {
+          "id": "dev.password",
+          "method": "GET",
+          "path": "/api/v1/password",
+          "group": "Developer",
+          "summary": "Generate a password and score it",
+          "tools": [
+            "password-generator"
+          ],
+          "params": [
+            {
+              "name": "length",
+              "in": "body",
+              "type": "number",
+              "description": "Characters, 4-128.",
+              "default": 20,
+              "example": "24"
+            },
+            {
+              "name": "uppercase",
+              "in": "body",
+              "type": "boolean",
+              "description": "Include A-Z.",
+              "default": true
+            },
+            {
+              "name": "lowercase",
+              "in": "body",
+              "type": "boolean",
+              "description": "Include a-z.",
+              "default": true
+            },
+            {
+              "name": "digits",
+              "in": "body",
+              "type": "boolean",
+              "description": "Include 0-9.",
+              "default": true
+            },
+            {
+              "name": "symbols",
+              "in": "body",
+              "type": "boolean",
+              "description": "Include punctuation.",
+              "default": true
+            },
+            {
+              "name": "avoid_ambiguous",
+              "in": "body",
+              "type": "boolean",
+              "description": "Drop l, 1, I, O, 0 and similar.",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "dev.token",
+          "method": "GET",
+          "path": "/api/v1/token/decode",
+          "group": "Developer",
+          "summary": "Read the structure of a token",
+          "tools": [
+            "token-inspector"
+          ],
+          "params": [
+            {
+              "name": "token",
+              "in": "body",
+              "type": "string",
+              "description": "A token you already own.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "id": "dev.timestamp",
+          "method": "GET",
+          "path": "/api/v1/timestamp",
+          "group": "Developer",
+          "summary": "Convert a date to Discord timestamp formats",
+          "tools": [
+            "timestamp-generator"
+          ],
+          "params": [
+            {
+              "name": "date",
+              "in": "body",
+              "type": "string",
+              "description": "ISO date or timestamp. Defaults to now.",
+              "example": "2024-01-01T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "dev.message-link",
+          "method": "GET",
+          "path": "/api/v1/message-links",
+          "group": "Developer",
+          "summary": "Split a message link into IDs",
+          "tools": [
+            "message-link"
+          ],
+          "params": [
+            {
+              "name": "url",
+              "in": "query",
+              "type": "string",
+              "required": true,
+              "description": "A discord.com message link.",
+              "example": "https://discord.com/channels/197038439483310086/123456789012345678/123456789012345679"
+            }
+          ]
+        },
+        {
+          "id": "dev.markdown",
+          "method": "GET",
+          "path": "/api/v1/markdown",
+          "group": "Developer",
+          "summary": "Discord markdown reference",
+          "tools": [
+            "markdown-guide"
+          ],
+          "params": []
+        }
+      ]
+    },
+    {
+      "name": "Misc",
+      "endpoints": [
+        {
+          "id": "misc.vtt",
+          "method": "GET",
+          "path": "/api/v1/vtt",
+          "group": "Misc",
+          "summary": "Parse WebVTT captions",
+          "tools": [
+            "vtt-tool"
+          ],
+          "params": [
+            {
+              "name": "input",
+              "in": "body",
+              "type": "string",
+              "description": "VTT file contents.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "id": "misc.age",
+          "method": "GET",
+          "path": "/api/v1/age",
+          "group": "Misc",
+          "summary": "Age statistics for a date",
+          "tools": [
+            "age-tool"
+          ],
+          "params": [
+            {
+              "name": "dob",
+              "in": "body",
+              "type": "string",
+              "description": "Date of birth, YYYY-MM-DD or ISO.",
+              "required": true,
+              "example": "2000-04-01"
+            },
+            {
+              "name": "from",
+              "in": "body",
+              "type": "string",
+              "description": "Reference date. Defaults to now.",
+              "example": "2026-01-01"
+            }
+          ]
+        },
+        {
+          "id": "misc.countdown",
+          "method": "GET",
+          "path": "/api/v1/countdown",
+          "group": "Misc",
+          "summary": "Format seconds as a countdown",
+          "tools": [
+            "countdown"
+          ],
+          "params": [
+            {
+              "name": "seconds",
+              "in": "body",
+              "type": "number",
+              "description": "Total seconds.",
+              "required": true,
+              "example": "93784"
+            }
+          ]
+        },
+        {
+          "id": "misc.sounds",
+          "method": "GET",
+          "path": "/api/v1/sounds",
+          "group": "Misc",
+          "summary": "List the synthesised soundboard",
+          "tools": [
+            "soundboard",
+            "discord-sfx"
+          ],
+          "params": []
+        }
+      ]
+    },
+    {
+      "name": "Generators",
+      "endpoints": [
+        {
+          "id": "gen.username",
+          "method": "GET",
+          "path": "/api/v1/generate/usernames",
+          "group": "Generators",
+          "summary": "Generate usernames",
+          "tools": [
+            "username-generator"
+          ],
+          "params": [
+            {
+              "name": "style",
+              "in": "query",
+              "type": "string",
+              "description": "Style id.",
+              "default": "aesthetic",
+              "enum": [
+                "aesthetic",
+                "minimal",
+                "gamer",
+                "leetspeak",
+                "twoWord",
+                "symbolic"
+              ]
+            },
+            {
+              "name": "count",
+              "in": "query",
+              "type": "number",
+              "description": "How many, 1-50.",
+              "default": 10
+            }
+          ]
+        },
+        {
+          "id": "gen.nickname",
+          "method": "GET",
+          "path": "/api/v1/generate/nicknames",
+          "group": "Generators",
+          "summary": "Generate nicknames",
+          "tools": [
+            "nickname-generator"
+          ],
+          "params": [
+            {
+              "name": "count",
+              "in": "query",
+              "type": "number",
+              "description": "How many, 1-50.",
+              "default": 10
+            }
+          ]
+        },
+        {
+          "id": "gen.bio",
+          "method": "GET",
+          "path": "/api/v1/generate/bio",
+          "group": "Generators",
+          "summary": "Generate a bio",
+          "tools": [
+            "bio-generator"
+          ],
+          "params": [
+            {
+              "name": "count",
+              "in": "query",
+              "type": "number",
+              "description": "How many, 1-50.",
+              "default": 10
+            }
+          ]
+        },
+        {
+          "id": "gen.server",
+          "method": "GET",
+          "path": "/api/v1/generate/server",
+          "group": "Generators",
+          "summary": "Generate a server name",
+          "tools": [
+            "server-name-generator",
+            "channel-name-generator"
+          ],
+          "params": [
+            {
+              "name": "channels",
+              "in": "query",
+              "type": "number",
+              "description": "Channel names, 1-30.",
+              "default": 8
+            }
+          ]
+        },
+        {
+          "id": "gen.channel",
+          "method": "GET",
+          "path": "/api/v1/generate/channels",
+          "group": "Generators",
+          "summary": "Generate channel names",
+          "tools": [
+            "channel-name-generator"
+          ],
+          "params": [
+            {
+              "name": "count",
+              "in": "query",
+              "type": "number",
+              "description": "How many, 1-50.",
+              "default": 10
+            }
+          ]
+        },
+        {
+          "id": "gen.role",
+          "method": "GET",
+          "path": "/api/v1/generate/roles",
+          "group": "Generators",
+          "summary": "Generate role names",
+          "tools": [
+            "role-name-generator"
+          ],
+          "params": [
+            {
+              "name": "count",
+              "in": "query",
+              "type": "number",
+              "description": "How many, 1-50.",
+              "default": 10
+            }
+          ]
+        },
+        {
+          "id": "gen.rules",
+          "method": "GET",
+          "path": "/api/v1/generate/rules",
+          "group": "Generators",
+          "summary": "Assemble a rules template",
+          "tools": [
+            "rules-generator"
+          ],
+          "params": [
+            {
+              "name": "titles",
+              "in": "body",
+              "type": "string",
+              "description": "Template titles to include.",
+              "required": true,
+              "example": "Be respectful,No spam"
+            },
+            {
+              "name": "server_name",
+              "in": "body",
+              "type": "string",
+              "description": "Substituted into the wording."
+            }
+          ]
+        },
+        {
+          "id": "gen.welcome",
+          "method": "GET",
+          "path": "/api/v1/generate/welcome",
+          "group": "Generators",
+          "summary": "Assemble a welcome message",
+          "tools": [
+            "welcome-generator"
+          ],
+          "params": [
+            {
+              "name": "server_name",
+              "in": "body",
+              "type": "string",
+              "description": "Server name.",
+              "required": true,
+              "example": "Aki's Tools"
+            },
+            {
+              "name": "user_name",
+              "in": "body",
+              "type": "string",
+              "description": "Name of the member being welcomed.",
+              "default": "friend",
+              "example": "dani"
+            },
+            {
+              "name": "member_count",
+              "in": "body",
+              "type": "number",
+              "description": "Member count shown in the message.",
+              "example": "1284"
+            },
+            {
+              "name": "channel_name",
+              "in": "body",
+              "type": "string",
+              "description": "Channel to point them at.",
+              "example": "rules"
+            },
+            {
+              "name": "rules_url",
+              "in": "body",
+              "type": "string",
+              "description": "Link to the rules.",
+              "example": "https://discord.gg/aki"
+            },
+            {
+              "name": "style",
+              "in": "body",
+              "type": "string",
+              "description": "embed, plain or image.",
+              "default": "plain",
+              "enum": [
+                "embed",
+                "plain",
+                "image"
+              ]
+            },
+            {
+              "name": "accent",
+              "in": "body",
+              "type": "string",
+              "description": "Hex colour for the embed style.",
+              "default": "#5865f2",
+              "example": "#5865f2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

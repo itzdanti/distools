@@ -1,0 +1,821 @@
+# aki's Discord Tools
+
+The tools, the API reference and the licence in one file. Generated from the documentation sources
+and the endpoint registry, so it matches the site.
+
+Site: https://distools.itzdanti.dev
+API base: https://distools.itzdanti.dev/api/v1
+Client module: https://distools.itzdanti.dev/api/v1/client.js
+Repository: https://github.com/itzdanti/distools
+
+---
+
+
+# Tools
+
+Every tool is at https://distools.itzdanti.dev/tool/<slug> and runs entirely in the browser. Only tools that
+fetch something from Discord make a network request, and those send nothing but the identifier
+you typed.
+
+Webhooks are the exception worth naming: the webhook tools post directly to Discord from your
+browser, because a webhook URL is a password and must not touch a third party.
+
+---
+
+# API reference
+
+53 endpoints across 10 groups.
+
+Every endpoint accepts GET with query parameters and POST with a JSON body. Both run in your own
+runtime through the client module, or over HTTP against a self-hosted copy of the handler. GitHub
+Pages only serves files, so a parameterised call to it returns the HTML shell.
+
+Three ways to call it:
+
+1. Open the URL in a browser. The site computes and renders the answer.
+2. Import the client module. This is the supported way to call it from code.
+3. curl the pre-baked discovery JSON, which are real files.
+
+A plain fetch() of a parameterised endpoint from another origin returns the HTML shell, because
+there is no server to run the handler. That is a property of static hosting, not a defect.
+
+### Text
+
+- GET /api/v1/text/fancy
+  id: text.fancy
+  Convert text to a fancy Unicode style
+      - text (required): Text to convert.
+      - style: Style id from GET /text/styles.
+
+- GET /api/v1/text/styles
+  id: text.styles
+  List every fancy text style
+
+- GET /api/v1/text/zalgo
+  id: text.zalgo
+  Add combining characters (zalgo)
+      - text (required): Text to stack.
+      - mode: Direction of the marks.
+      - amount: Marks per character.
+
+- GET /api/v1/text/small-caps
+  id: text.small-caps
+  Convert text to small caps
+      - text (required): Text to convert.
+
+- GET /api/v1/text/spoiler
+  id: text.spoiler
+  Wrap text in Discord spoilers
+      - text (required): Text to hide.
+      - mode: line or char.
+
+- GET /api/v1/text/divider
+  id: text.divider
+  Build a text divider
+      - char: Character to repeat. Defaults to the first preset.
+      - length: How many characters.
+
+- GET /api/v1/text/status
+  id: text.status
+  Build a Discord custom status
+      - text: Status text, up to 128 characters.
+      - emoji: Optional leading emoji. Only added when it is missing.
+
+- GET /api/v1/text/mentions
+  id: text.mentions
+  Build mention strings
+      - type: Mention type id.
+      - ids (required): IDs to wrap.
+
+- GET /api/v1/text/mention-types
+  id: text.mention-types
+  List mention templates
+
+- GET /api/v1/text/stats
+  id: text.stats
+  Word, character and reading stats
+      - text (required): Text to measure.
+
+- GET /api/v1/text/transform
+  id: text.transform
+  Case changes and stylisers
+      - text (required): Text to transform.
+      - mode (required): Transform to apply.
+
+### IDs
+
+- GET /api/v1/snowflake
+  id: ids.snowflake
+  Decode a snowflake
+      - id (required): The snowflake to decode.
+
+- GET /api/v1/snowflake/create
+  id: ids.snowflake-create
+  Build a snowflake from a date
+      - date (required): ISO date or timestamp.
+      - worker_id: Worker id, 0-31.
+      - process_id: Process id, 0-31.
+      - increment: Increment, 0-1023.
+
+- GET /api/v1/ids/mock
+  id: ids.mock
+  Generate fake snowflakes
+      - count: How many to generate.
+      - kind: What the ids are for. Only changes the wording, never the format.
+
+### Discord
+
+- GET /api/v1/discord/users/:id
+  id: ids.user
+  Look up a user
+      - id (required): User ID, or any string containing one.
+
+- GET /api/v1/discord/guilds/:id
+  id: ids.guild
+  Look up a server
+      - id (required): Guild ID, invite code or discord.gg link.
+
+- GET /api/v1/discord/invites/:code
+  id: ids.invite
+  Look up an invite
+      - code (required): Invite code or full discord.gg link.
+
+- GET /api/v1/discord/emojis/:id
+  id: ids.emoji
+  Look up an emoji
+      - id (required): Emoji ID.
+
+- GET /api/v1/discord/snowflakes/:id
+  id: ids.snowflake-exists
+  Check whether a snowflake is a real user
+      - id (required): Snowflake to check.
+
+- GET /api/v1/badges
+  id: dev.badges
+  List every user badge
+
+### Invites
+
+- GET /api/v1/invites/extract
+  id: invites.extract
+  Pull the code out of an invite link
+      - url (required): Any invite link or bare code.
+
+- GET /api/v1/invites/images
+  id: invites.images
+  Resolve a server icon and banner from an invite
+      - code (required): Invite code or full discord.gg link.
+      - size: CDN size. 16 to 4096.
+
+- GET /api/v1/invites/build
+  id: invites.build
+  Validate invite options and build the query string
+      - channel_id (required): Channel the invite points at.
+      - guild_id: Guild ID, for the invite payload.
+      - max_age: Seconds before expiry.
+      - max_uses: 0 is unlimited.
+      - temporary: Members get the Temporary Membership flag.
+      - unique: Force a new code.
+      - target_type: 1 stream, 2 embedded application.
+      - target_id: Target application or stream ID.
+
+### Webhooks
+
+- GET /api/v1/webhooks/payload
+  id: webhooks.payload
+  Build and validate a webhook payload
+      - username: Webhook username override.
+      - avatar_url: Webhook avatar override.
+      - content: Message content.
+      - include_content: Always include an empty content field.
+      - thread_id: Send into a thread.
+      - embed: Embed object: title, description, color, fields and so on.
+
+- GET /api/v1/webhooks/limits
+  id: webhooks.limits
+  Embed and webhook limits
+
+- GET /api/v1/webhooks/rpc
+  id: webhooks.rpc
+  Build a rich presence payload
+      - text (required): Main text, what you are doing.
+      - verb: Which activity type to use.
+      - state: Optional second line.
+      - started_at: Epoch milliseconds, for the elapsed clock.
+      - large_image: Application icon key or URL.
+      - small_image: Secondary icon key or URL.
+
+### Permissions
+
+- GET /api/v1/permissions
+  id: permissions.compute
+  Convert permission names to an integer, or back
+      - permissions: Permission names, comma separated. Case and spacing do not matter.
+      - integer: Decimal, 0x hex or 0b binary integer.
+
+- GET /api/v1/permissions/all
+  id: permissions.list
+  Every permission with its bit
+
+### Emoji
+
+- GET /api/v1/emojis
+  id: emoji.library
+  Search the built-in emoji library
+      - q: Match against name, character or keywords.
+      - category: Category id.
+      - limit: Maximum results, 1-500.
+
+- GET /api/v1/emojis/categories
+  id: emoji.categories
+  List emoji categories
+
+- GET /api/v1/emoji/color-text
+  id: emoji.color-text
+  Get coloured text, or find out why you cannot
+      - text (required): Text to colour.
+      - hex (required): Colour as a hex string.
+      - mode: embed for the payload a bot posts, blocks for the decoration.
+
+### Developer
+
+- GET /api/v1/base64
+  id: codecs.base64
+  Base64 encode or decode
+      - input (required): Value to convert.
+      - mode: encode, decode, encodeUrl or decodeUrl.
+
+- GET /api/v1/url
+  id: codecs.url
+  Percent-encode or decode a URL component
+      - input (required): Value to convert.
+      - mode: encode, decode or component.
+
+- GET /api/v1/json
+  id: dev.json
+  Format, minify or validate JSON
+      - input (required): JSON text.
+      - mode: What to do with it.
+      - indent: Spaces per level for pretty mode.
+      - sort_keys: Sort object keys recursively.
+
+- GET /api/v1/uuid
+  id: dev.uuid
+  Generate v4 UUIDs
+      - count: How many, 1-100.
+
+- GET /api/v1/color
+  id: dev.color
+  Convert a colour between every format
+      - hex: Hex colour, with or without the #.
+      - rgb: RGB string or object.
+      - hsl: HSL string or object.
+
+- GET /api/v1/password
+  id: dev.password
+  Generate a password and score it
+      - length: Characters, 4-128.
+      - uppercase: Include A-Z.
+      - lowercase: Include a-z.
+      - digits: Include 0-9.
+      - symbols: Include punctuation.
+      - avoid_ambiguous: Drop l, 1, I, O, 0 and similar.
+
+- GET /api/v1/token/decode
+  id: dev.token
+  Read the structure of a token
+      - token (required): A token you already own.
+
+- GET /api/v1/timestamp
+  id: dev.timestamp
+  Convert a date to Discord timestamp formats
+      - date: ISO date or timestamp. Defaults to now.
+
+- GET /api/v1/message-links
+  id: dev.message-link
+  Split a message link into IDs
+      - url (required): A discord.com message link.
+
+- GET /api/v1/markdown
+  id: dev.markdown
+  Discord markdown reference
+
+### Misc
+
+- GET /api/v1/vtt
+  id: misc.vtt
+  Parse WebVTT captions
+      - input (required): VTT file contents.
+
+- GET /api/v1/age
+  id: misc.age
+  Age statistics for a date
+      - dob (required): Date of birth, YYYY-MM-DD or ISO.
+      - from: Reference date. Defaults to now.
+
+- GET /api/v1/countdown
+  id: misc.countdown
+  Format seconds as a countdown
+      - seconds (required): Total seconds.
+
+- GET /api/v1/sounds
+  id: misc.sounds
+  List the synthesised soundboard
+
+### Generators
+
+- GET /api/v1/generate/usernames
+  id: gen.username
+  Generate usernames
+      - style: Style id.
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/nicknames
+  id: gen.nickname
+  Generate nicknames
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/bio
+  id: gen.bio
+  Generate a bio
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/server
+  id: gen.server
+  Generate a server name
+      - channels: Channel names, 1-30.
+
+- GET /api/v1/generate/channels
+  id: gen.channel
+  Generate channel names
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/roles
+  id: gen.role
+  Generate role names
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/rules
+  id: gen.rules
+  Assemble a rules template
+      - titles (required): Template titles to include.
+      - server_name: Substituted into the wording.
+
+- GET /api/v1/generate/welcome
+  id: gen.welcome
+  Assemble a welcome message
+      - server_name (required): Server name.
+      - user_name: Name of the member being welcomed.
+      - member_count: Member count shown in the message.
+      - channel_name: Channel to point them at.
+      - rules_url: Link to the rules.
+      - style: embed, plain or image.
+      - accent: Hex colour for the embed style.
+
+---
+
+# Licence
+
+Custom. You may use, modify, copy, merge, publish, distribute and sublicense this, including
+commercially. You may not sell it. Keep the copyright notice.
+
+https://github.com/itzdanti/distools/blob/main/LICENSE
+
+---
+
+# Documentation
+
+## API
+
+Source: https://distools.itzdanti.dev/docs/api
+
+The API is the same code the tools run, exposed as an ES module and as JSON the browser can
+render. It is served by GitHub Pages from this repository, so there is no separate backend to
+deploy and nothing to sign up for. A process that wants a live HTTP API can run the server
+included in the repository (`npm run serve`); GitHub Pages itself only serves files.
+
+## What a static API means here
+
+GitHub Pages serves files. There is no process behind the domain that can read a query string
+and compute an answer. That shapes the whole design, so it is worth being straight about what
+works and what does not.
+
+  Pages can serve a file, so it answers endpoints that need no parameters. It has no process, so
+  a **parameterised** call such as `?text=hello` cannot be answered there. The handler accepts
+  `GET` with query parameters and `POST` with a JSON body; both work through the client module and
+  against a self-hosted `npm run serve`, and neither works as a bare `fetch` or `curl` to Pages.
+
+Three ways to call it, in order of how much you should care:
+
+1. **Open the URL.** `distools.itzdanti.dev/api/v1/text/fancy?text=hello&style=bold` renders the
+   JSON in your browser. Good for sharing and for eyeballing a response.
+2. **Import the client.** `https://distools.itzdanti.dev/api/v1/client.js` is a dependency-free
+   ES module that bundles the handler. **This is the supported way to call the API from code**,
+   in a browser or in Node 18+.
+3. **Pre-baked JSON.** The discovery documents are real files, so `curl` returns JSON with the
+   right content type:
+
+```bash
+curl https://distools.itzdanti.dev/api/v1/openapi.json
+curl https://distools.itzdanti.dev/api/v1/index.json
+curl https://distools.itzdanti.dev/api/v1/health.json
+curl https://distools.itzdanti.dev/api/v1/tools.json
+```
+
+A plain `fetch()` of a *parameterised* endpoint from another origin will not work, and it is
+worth understanding why rather than assuming you did something wrong: Pages has no handler for
+that path, so it returns the HTML shell. Import the client and it runs in your own runtime.
+
+## Using the client
+
+```js
+
+// GET, with query parameters.
+const fancy = await api.get("/text/fancy", { text: "hello", style: "bold" });
+console.log(fancy.data.output);
+
+// Array parameters repeat the key.
+const counter = await api.get("/text/counter", { text: "ab", repeat: 3 });
+
+// Errors carry the status and the payload the endpoint produced.
+try {
+  await api.get("/text/fancy", { style: "nonsense" });
+} catch (error) {
+  if (error instanceof ApiRequestError) console.log(error.status, error.message);
+}
+
+// The shareable URL for any call.
+console.log(api.url("/text/fancy", { text: "hello" }));
+
+// Look endpoints up to build a menu, or to check what a tool supports.
+console.log(findEndpoint("/text/fancy").params);
+```
+
+It runs in Deno and in Node 18+ as well, since it has no DOM dependencies. Nothing it does
+touches this site: the module is the logic, not a proxy.
+
+## Response shape
+
+A successful call returns the result under `data`, alongside enough context to log it:
+
+```json
+{
+  "data": { "output": "𝗵𝗲𝗹𝗹𝗼" },
+  "endpoint": "text.fancy",
+  "method": "GET",
+  "path": "/api/v1/text/fancy"
+}
+```
+
+Errors look like this, with a matching HTTP status:
+
+```json
+{
+  "error": { "message": "\"style\" must be one of: bold, italic, underline.", "status": 400 },
+  "endpoint": "text.fancy"
+}
+```
+
+## Conventions
+
+- **Lists** are comma-separated, or repeat the key. `?items=a,b,c` and `?items=a&items=b` both
+  work. Commas never separate on spaces, so names containing spaces survive.
+- **Booleans** accept `1`, `true`, `yes` and `on`.
+- **Numbers** are validated. An out-of-range value is a `400` with the range in the message,
+  never a silent clamp.
+- **Unknown paths** return `404` and point at the index.
+- **Discord lookups** are the only endpoints that touch the network. Invites work. Guild and
+  user routes answer `401` from Discord without a token; the endpoints pass that through with an
+  explanation instead of hiding it.
+
+## Endpoints
+
+---
+
+## Contributing
+
+Source: https://distools.itzdanti.dev/docs/contributing
+
+Pull requests are welcome, including from people who have never contributed to anything before.
+If you can open a pull request, you can contribute here.
+
+## Getting set up
+
+You need Node 20 or newer.
+
+```bash
+git clone https://github.com/itzdanti/distools.git
+cd distools
+npm install
+npm run dev
+```
+
+That serves the site on `http://localhost:5173`. There is no backend to start and no environment
+file to fill in.
+
+## Adding a tool
+
+A tool is three things: the logic, a registry entry, and a page.
+
+**1. Write the logic in `src/lib/core/`.** Keep it a pure function that takes plain values and
+returns a plain value. No React, no `document`, no `fetch` unless the tool genuinely needs the
+network. This is what lets the same code power the page, the API endpoint and the API client.
+
+```ts
+// src/lib/core/shout.ts
+export function shout(text: string): string {
+  return `${text.toUpperCase()}!`;
+}
+```
+
+**2. Register it in `src/tools/registry.tsx`.** Give it a stable slug, because slugs are URLs
+and appear in the API. Add an icon, a category and a short description that says what it does
+rather than what it is called.
+
+**3. Build the page** in `src/tools/<category>.tsx`, using the shared `<Panel>`, `<Field>` and
+`<Button>` components so it looks like the rest of the site.
+
+## Adding an API endpoint
+
+Endpoints live in `src/lib/core/api.ts` and are declared next to each other with a handler that
+uses the same core module the tool uses.
+
+```ts
+{
+  id: "text.shout",
+  method: "POST",
+  path: "/api/v1/text/shout",
+  group: "Text",
+  summary: "Uppercase text and add an exclamation mark.",
+  description: "Takes text and returns it shouted.",
+  tools: ["shout"],
+  params: [{ name: "text", in: "body", type: "string", required: true, description: "..." }],
+  handler: (input) => ({ output: shout(required(input, "text")) }),
+}
+```
+
+A few rules that the tests will not catch for you:
+
+- **Never accept a webhook URL.** Not in any endpoint, under any name.
+- **Never accept a token.** There is no authenticated mode to put it in.
+- **Use `required`, `int` and `oneOf`.** They produce the standard `400` shape, and they are what
+  keeps invalid input from reaching your logic.
+- **Pure functions only.** The same handler runs in a browser, in Node and in the pre-baked
+  build step. If it reads the clock, pass the time in.
+
+Once it is registered, the endpoint appears automatically in the per-tool API panel, in the
+`/docs/api` reference, in `openapi.json` and in `dist/api/v1/index.json`. There is no list to
+update by hand.
+
+## Before you open the pull request
+
+```bash
+npm run lint         # oxlint, no errors
+npm run test:config  # DISTOOLS_CONFIG still parses
+npm run build        # type-checks and builds
+npm run docs:openapi # regenerate openapi.json if you touched the API
+npm run verify       # all of the above: lint, tests, build, dist and server checks
+```
+
+If you added an endpoint, add it to the smoke tests too. They run the real handler against real
+input and check the error shapes, which is the part most likely to be wrong.
+
+## Releases
+
+Maintainers cut releases, not pull requests. A `v*` tag, or the **Deploy and release** workflow
+run by hand, builds the site and publishes a GitHub release whose notes are the commits since the
+last tag. You do not need to update `CHANGELOG.md`; it lists the project's shape, and the per-release
+notes are generated from commits.
+
+## House rules
+
+- **Match the surrounding code.** Comments explain why, not what. Two-space indent, double
+  quotes, semicolons.
+- **Do not add a dependency without asking.** The bundle is small on purpose.
+- **Do not add a network call to a tool that does not need one.** Pure tools stay pure, and the
+  privacy page stays true.
+- **Keep the copy human.** "Paste an invite link", not "Enter the invite identifier".
+
+## Reporting a bug
+
+Open an issue with what you did, what you expected and what happened instead. A screenshot
+helps. If it only happens on one tool, say which one and which browser.
+
+Security problems: open a private advisory on the repository rather than a public issue.
+
+---
+
+## Getting started
+
+Source: https://distools.itzdanti.dev/docs/getting-started
+
+Every tool is on one page and works the moment the page loads. There is nothing to install,
+no sign-in, and no setting to configure.
+
+## Tools that use the network
+
+Most tools are pure computation: fancy text is string replacement, a snowflake decoder is
+arithmetic, the permission calculator is bitwise maths. Those never touch the network.
+
+A smaller group does make an outbound request, because the data lives on Discord's servers and
+not in your browser. Those tools carry a **network** badge in the corner of their card.
+
+The request contains only the thing you typed — a user ID, a guild ID, an invite code, or an
+emoji ID. Nothing else from the page is attached.
+
+## How a lookup is routed
+
+  
+    ### Your own API
+
+    If the site is published with a hosted API configured, the lookup goes there first. Same
+    origin, so no cross-origin question at all.
+  
+  
+    ### Discord directly
+
+    Otherwise the browser asks Discord itself. Most of the time this is blocked by Discord's
+    CORS policy, but not always.
+  
+  
+    ### A public proxy
+
+    If the browser blocked that, the request is relayed through a public, unauthenticated CORS
+    proxy. This works, and it is also the weakest link: the proxy can see the request. That is
+    why nothing private should go into a lookup field.
+  
+
+The tool reports which route answered, so you always know whether a proxy saw your request.
+
+## What Discord will and will not tell you
+
+Worth knowing before you conclude a tool is broken:
+
+- **Invites work.** `discord.gg/whatever` returns the server name, member count, online count
+  and icon, with no token.
+- **Servers by ID usually do not.** `GET /guilds/{id}` answers `401` to anonymous callers as of
+  October 2026. Discord wants a bot token, and this site has none and will never ask you for one.
+- **Users by ID are ambiguous.** `GET /users/{id}` also answers `401`, and deliberately does not
+  say whether that means the account is private or does not exist. The tools report "no public
+  profile" instead of guessing.
+- **CDN images are public.** Avatars, banners, server icons and emoji can be embedded directly.
+
+Where a route is restricted, the tool says so plainly rather than showing a spinner forever.
+
+## Webhooks
+
+A webhook URL is a password. Anyone holding it can post as that webhook.
+
+The two webhook tools send **straight to Discord** from your browser. Nothing is relayed through
+a proxy, and no endpoint in the API accepts a webhook URL at all. Delete the webhook when you
+are done with it.
+
+---
+
+## Introduction
+
+Source: https://distools.itzdanti.dev/docs/index
+
+aki's Discord Tools is 57 small utilities for Discord servers and users. Fancy text, snowflake
+decoding, permission maths, invite inspection, webhook sending, emoji work.
+
+Everything runs in your browser. There is no account, no database and no server holding
+anything you type.
+
+## What is here
+
+<div className="cards">
+  <div className="card">
+    <h3>57 tools</h3>
+    <p>Text formatting, ID decoding, permission maths, emoji, webhooks, developer helpers and a handful of oddities.</p>
+  </div>
+  <div className="card">
+    <h3>53 API endpoints</h3>
+    <p>The same logic, callable over HTTP or as an ES module. No key, no rate limit, no user data.</p>
+  </div>
+  <div className="card">
+    <h3>Static hosting</h3>
+    <p>Served by GitHub Pages from a single repository. If the site is up, the API is up.</p>
+  </div>
+</div>
+
+## Where to go next
+
+- [Getting started](/docs/getting-started) — what the tools do and what they send over the network.
+- [API overview](/docs/api) — the 53 endpoints and how to call them.
+- [Privacy](/docs/privacy) — the short version, and the long version.
+- [Contributing](/docs/contributing) — how to add a tool or an endpoint.
+
+---
+
+## Privacy
+
+Source: https://distools.itzdanti.dev/docs/privacy
+
+The short version: there is nothing to sign up for, nothing is stored, and no tool on this site
+will ask you for your password, your token or your 2FA code.
+
+## What is stored
+
+Nothing. There is no database, no account system and no analytics script. The site sets no
+cookies. The only thing it will ever write to your browser is your theme preference, in
+`localStorage`, and clearing site data removes it.
+
+## What leaves your browser
+
+Two categories of tool send anything at all.
+
+**Lookups.** Tools that fetch a profile, avatar, banner or invite send the one identifier you
+typed — a user ID, a guild ID, an invite code, an emoji ID — to Discord, or to a public CORS
+proxy if Discord blocked the direct call. Nothing else from the page is attached. The tool tells
+you which route answered, so you always know when a third party was involved.
+
+**Webhooks.** The webhook tools post straight to Discord with the URL you pasted. A webhook URL
+is a credential: anyone holding it can post as that webhook. Delete it when you are finished.
+
+## What never leaves your browser
+
+Everything else. Fancy text, snowflake decoding, timestamp conversion, the permission
+calculator, colour shading, the token inspector, emoji resizing and image cropping are all
+computation on data you already have. Open the network tab and watch.
+
+## The token inspector
+
+It decodes the *structure* of a token on your machine: which parts are present, roughly when it
+was issued, what the flags say. It never transmits the token, and it cannot tell you whether a
+token is valid, because that would require sending it.
+
+A genuine Discord support agent will never ask for your password, your token or your 2FA code.
+Nobody will.
+
+## The API
+
+The same rules apply, with two additions.
+
+There is no authentication, because there is nothing to authenticate against. No endpoint
+accepts a token, and **no endpoint accepts a webhook URL at all** — that is why the two webhook
+senders have no API endpoint. If you find an endpoint that will take a webhook URL, it is not
+this API.
+
+The Discord endpoints are the only ones that make an outbound request, and they request exactly
+one thing: the resource you asked for.
+
+## Hosting
+
+The site is a static bundle on GitHub Pages. GitHub serves the files and logs the requests in
+the ordinary way any web host does. There is no application server, no database and no
+third-party analytics embedded in the page.
+
+---
+
+## Terms of service
+
+Source: https://distools.itzdanti.dev/docs/terms
+
+By using aki's Discord Tools you agree to these terms. They are short because the service is
+simple: it is a static site of browser-side utilities, offered as-is to anyone.
+
+## What this service is
+
+aki's Discord Tools is a collection of free utilities for Discord. Every tool runs in your
+browser. There is no account, no server that processes your input, and no fee.
+
+## Acceptable use
+
+Use the tools only for lawful purposes and on data you are entitled to work with. In particular:
+
+- Do not use the tools to harass, dox, or harm anyone.
+- Do not use the webhook tools to send spam, malware, or content that violates Discord's own
+  [Terms of Service](https://discord.com/terms) or [Community Guidelines](https://discord.com/guidelines).
+- Do not attempt to use the site to attack, overload, or gain unauthorised access to any system.
+
+You are responsible for the webhooks you interact with. A webhook URL is a credential: anyone who
+has it can post as that webhook. Only use webhook tools on webhooks you own or are trusted to use.
+
+## No warranty
+
+The service is provided "as is", without warranty of any kind. It may change, break, or go offline
+at any time. The authors are not liable for any loss arising from your use of it, to the fullest
+extent permitted by law.
+
+## Third-party services
+
+Some tools contact Discord, or a public CORS proxy, as described in the [privacy
+policy](/docs/privacy). Those requests are governed by their operators' terms, not these. This
+site is not affiliated with, endorsed by, or sponsored by Discord Inc.
+
+## Intellectual property and takedowns
+
+The source is published under a custom, permissive licence that forbids selling the software
+itself; see the repository for the full text. If you believe content here infringes your rights,
+contact the address below and it will be reviewed.
+
+## Changes
+
+These terms may be updated as the project changes. Continued use after a change means you accept
+the updated terms.
+
+## Contact
+
+For legal or takedown requests, email **legal@itzdanti.dev**. For everything else, see the
+[support page](/docs/contributing).

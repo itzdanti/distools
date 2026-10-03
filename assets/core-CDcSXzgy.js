@@ -1,0 +1,1 @@
+import{u as e}from"./core-Bc4Aw5eU.js";import"./index-DgKychiT.js";export{e as isSpecialLang};

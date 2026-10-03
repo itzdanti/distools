@@ -1,0 +1,382 @@
+# aki's Discord Tools
+
+The tools, the API reference and the licence in one file. Generated from the documentation sources
+and the endpoint registry, so it matches the site.
+
+Site: https://distools.itzdanti.dev
+API base: https://distools.itzdanti.dev/api/v1
+Client module: https://distools.itzdanti.dev/api/v1/client.js
+Repository: https://github.com/itzdanti/distools
+
+---
+
+
+# Tools
+
+Every tool is at https://distools.itzdanti.dev/tool/<slug> and runs entirely in the browser. Only tools that
+fetch something from Discord make a network request, and those send nothing but the identifier
+you typed.
+
+Webhooks are the exception worth naming: the webhook tools post directly to Discord from your
+browser, because a webhook URL is a password and must not touch a third party.
+
+---
+
+# API reference
+
+53 endpoints across 10 groups.
+
+Every endpoint accepts GET with query parameters and POST with a JSON body. Both run in your own
+runtime through the client module, or over HTTP against a self-hosted copy of the handler. GitHub
+Pages only serves files, so a parameterised call to it returns the HTML shell.
+
+Three ways to call it:
+
+1. Open the URL in a browser. The site computes and renders the answer.
+2. Import the client module. This is the supported way to call it from code.
+3. curl the pre-baked discovery JSON, which are real files.
+
+A plain fetch() of a parameterised endpoint from another origin returns the HTML shell, because
+there is no server to run the handler. That is a property of static hosting, not a defect.
+
+### Text
+
+- GET /api/v1/text/fancy
+  id: text.fancy
+  Convert text to a fancy Unicode style
+      - text (required): Text to convert.
+      - style: Style id from GET /text/styles.
+
+- GET /api/v1/text/styles
+  id: text.styles
+  List every fancy text style
+
+- GET /api/v1/text/zalgo
+  id: text.zalgo
+  Add combining characters (zalgo)
+      - text (required): Text to stack.
+      - mode: Direction of the marks.
+      - amount: Marks per character.
+
+- GET /api/v1/text/small-caps
+  id: text.small-caps
+  Convert text to small caps
+      - text (required): Text to convert.
+
+- GET /api/v1/text/spoiler
+  id: text.spoiler
+  Wrap text in Discord spoilers
+      - text (required): Text to hide.
+      - mode: line or char.
+
+- GET /api/v1/text/divider
+  id: text.divider
+  Build a text divider
+      - char: Character to repeat. Defaults to the first preset.
+      - length: How many characters.
+
+- GET /api/v1/text/status
+  id: text.status
+  Build a Discord custom status
+      - text: Status text, up to 128 characters.
+      - emoji: Optional leading emoji. Only added when it is missing.
+
+- GET /api/v1/text/mentions
+  id: text.mentions
+  Build mention strings
+      - type: Mention type id.
+      - ids (required): IDs to wrap.
+
+- GET /api/v1/text/mention-types
+  id: text.mention-types
+  List mention templates
+
+- GET /api/v1/text/stats
+  id: text.stats
+  Word, character and reading stats
+      - text (required): Text to measure.
+
+- GET /api/v1/text/transform
+  id: text.transform
+  Case changes and stylisers
+      - text (required): Text to transform.
+      - mode (required): Transform to apply.
+
+### IDs
+
+- GET /api/v1/snowflake
+  id: ids.snowflake
+  Decode a snowflake
+      - id (required): The snowflake to decode.
+
+- GET /api/v1/snowflake/create
+  id: ids.snowflake-create
+  Build a snowflake from a date
+      - date (required): ISO date or timestamp.
+      - worker_id: Worker id, 0-31.
+      - process_id: Process id, 0-31.
+      - increment: Increment, 0-1023.
+
+- GET /api/v1/ids/mock
+  id: ids.mock
+  Generate fake snowflakes
+      - count: How many to generate.
+      - kind: What the ids are for. Only changes the wording, never the format.
+
+### Discord
+
+- GET /api/v1/discord/users/:id
+  id: ids.user
+  Look up a user
+      - id (required): User ID, or any string containing one.
+
+- GET /api/v1/discord/guilds/:id
+  id: ids.guild
+  Look up a server
+      - id (required): Guild ID, invite code or discord.gg link.
+
+- GET /api/v1/discord/invites/:code
+  id: ids.invite
+  Look up an invite
+      - code (required): Invite code or full discord.gg link.
+
+- GET /api/v1/discord/emojis/:id
+  id: ids.emoji
+  Look up an emoji
+      - id (required): Emoji ID.
+
+- GET /api/v1/discord/snowflakes/:id
+  id: ids.snowflake-exists
+  Check whether a snowflake is a real user
+      - id (required): Snowflake to check.
+
+- GET /api/v1/badges
+  id: dev.badges
+  List every user badge
+
+### Invites
+
+- GET /api/v1/invites/extract
+  id: invites.extract
+  Pull the code out of an invite link
+      - url (required): Any invite link or bare code.
+
+- GET /api/v1/invites/images
+  id: invites.images
+  Resolve a server icon and banner from an invite
+      - code (required): Invite code or full discord.gg link.
+      - size: CDN size. 16 to 4096.
+
+- GET /api/v1/invites/build
+  id: invites.build
+  Validate invite options and build the query string
+      - channel_id (required): Channel the invite points at.
+      - guild_id: Guild ID, for the invite payload.
+      - max_age: Seconds before expiry.
+      - max_uses: 0 is unlimited.
+      - temporary: Members get the Temporary Membership flag.
+      - unique: Force a new code.
+      - target_type: 1 stream, 2 embedded application.
+      - target_id: Target application or stream ID.
+
+### Webhooks
+
+- GET /api/v1/webhooks/payload
+  id: webhooks.payload
+  Build and validate a webhook payload
+      - username: Webhook username override.
+      - avatar_url: Webhook avatar override.
+      - content: Message content.
+      - include_content: Always include an empty content field.
+      - thread_id: Send into a thread.
+      - embed: Embed object: title, description, color, fields and so on.
+
+- GET /api/v1/webhooks/limits
+  id: webhooks.limits
+  Embed and webhook limits
+
+- GET /api/v1/webhooks/rpc
+  id: webhooks.rpc
+  Build a rich presence payload
+      - text (required): Main text, what you are doing.
+      - verb: Which activity type to use.
+      - state: Optional second line.
+      - started_at: Epoch milliseconds, for the elapsed clock.
+      - large_image: Application icon key or URL.
+      - small_image: Secondary icon key or URL.
+
+### Permissions
+
+- GET /api/v1/permissions
+  id: permissions.compute
+  Convert permission names to an integer, or back
+      - permissions: Permission names, comma separated. Case and spacing do not matter.
+      - integer: Decimal, 0x hex or 0b binary integer.
+
+- GET /api/v1/permissions/all
+  id: permissions.list
+  Every permission with its bit
+
+### Emoji
+
+- GET /api/v1/emojis
+  id: emoji.library
+  Search the built-in emoji library
+      - q: Match against name, character or keywords.
+      - category: Category id.
+      - limit: Maximum results, 1-500.
+
+- GET /api/v1/emojis/categories
+  id: emoji.categories
+  List emoji categories
+
+- GET /api/v1/emoji/color-text
+  id: emoji.color-text
+  Get coloured text, or find out why you cannot
+      - text (required): Text to colour.
+      - hex (required): Colour as a hex string.
+      - mode: embed for the payload a bot posts, blocks for the decoration.
+
+### Developer
+
+- GET /api/v1/base64
+  id: codecs.base64
+  Base64 encode or decode
+      - input (required): Value to convert.
+      - mode: encode, decode, encodeUrl or decodeUrl.
+
+- GET /api/v1/url
+  id: codecs.url
+  Percent-encode or decode a URL component
+      - input (required): Value to convert.
+      - mode: encode, decode or component.
+
+- GET /api/v1/json
+  id: dev.json
+  Format, minify or validate JSON
+      - input (required): JSON text.
+      - mode: What to do with it.
+      - indent: Spaces per level for pretty mode.
+      - sort_keys: Sort object keys recursively.
+
+- GET /api/v1/uuid
+  id: dev.uuid
+  Generate v4 UUIDs
+      - count: How many, 1-100.
+
+- GET /api/v1/color
+  id: dev.color
+  Convert a colour between every format
+      - hex: Hex colour, with or without the #.
+      - rgb: RGB string or object.
+      - hsl: HSL string or object.
+
+- GET /api/v1/password
+  id: dev.password
+  Generate a password and score it
+      - length: Characters, 4-128.
+      - uppercase: Include A-Z.
+      - lowercase: Include a-z.
+      - digits: Include 0-9.
+      - symbols: Include punctuation.
+      - avoid_ambiguous: Drop l, 1, I, O, 0 and similar.
+
+- GET /api/v1/token/decode
+  id: dev.token
+  Read the structure of a token
+      - token (required): A token you already own.
+
+- GET /api/v1/timestamp
+  id: dev.timestamp
+  Convert a date to Discord timestamp formats
+      - date: ISO date or timestamp. Defaults to now.
+
+- GET /api/v1/message-links
+  id: dev.message-link
+  Split a message link into IDs
+      - url (required): A discord.com message link.
+
+- GET /api/v1/markdown
+  id: dev.markdown
+  Discord markdown reference
+
+### Misc
+
+- GET /api/v1/vtt
+  id: misc.vtt
+  Parse WebVTT captions
+      - input (required): VTT file contents.
+
+- GET /api/v1/age
+  id: misc.age
+  Age statistics for a date
+      - dob (required): Date of birth, YYYY-MM-DD or ISO.
+      - from: Reference date. Defaults to now.
+
+- GET /api/v1/countdown
+  id: misc.countdown
+  Format seconds as a countdown
+      - seconds (required): Total seconds.
+
+- GET /api/v1/sounds
+  id: misc.sounds
+  List the synthesised soundboard
+
+### Generators
+
+- GET /api/v1/generate/usernames
+  id: gen.username
+  Generate usernames
+      - style: Style id.
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/nicknames
+  id: gen.nickname
+  Generate nicknames
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/bio
+  id: gen.bio
+  Generate a bio
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/server
+  id: gen.server
+  Generate a server name
+      - channels: Channel names, 1-30.
+
+- GET /api/v1/generate/channels
+  id: gen.channel
+  Generate channel names
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/roles
+  id: gen.role
+  Generate role names
+      - count: How many, 1-50.
+
+- GET /api/v1/generate/rules
+  id: gen.rules
+  Assemble a rules template
+      - titles (required): Template titles to include.
+      - server_name: Substituted into the wording.
+
+- GET /api/v1/generate/welcome
+  id: gen.welcome
+  Assemble a welcome message
+      - server_name (required): Server name.
+      - user_name: Name of the member being welcomed.
+      - member_count: Member count shown in the message.
+      - channel_name: Channel to point them at.
+      - rules_url: Link to the rules.
+      - style: embed, plain or image.
+      - accent: Hex colour for the embed style.
+
+---
+
+# Licence
+
+Custom. You may use, modify, copy, merge, publish, distribute and sublicense this, including
+commercially. You may not sell it. Keep the copyright notice.
+
+https://github.com/itzdanti/distools/blob/main/LICENSE

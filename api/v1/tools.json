@@ -1,0 +1,356 @@
+{
+  "tools": {
+    "fancy-text": {
+      "endpoints": [
+        "POST /api/v1/text/fancy",
+        "GET /api/v1/text/styles"
+      ],
+      "requests": []
+    },
+    "zalgo-text": {
+      "endpoints": [
+        "POST /api/v1/text/zalgo"
+      ],
+      "requests": []
+    },
+    "small-caps": {
+      "endpoints": [
+        "POST /api/v1/text/small-caps"
+      ],
+      "requests": []
+    },
+    "spoiler-text": {
+      "endpoints": [
+        "POST /api/v1/text/spoiler"
+      ],
+      "requests": []
+    },
+    "text-divider": {
+      "endpoints": [
+        "POST /api/v1/text/divider"
+      ],
+      "requests": []
+    },
+    "custom-status": {
+      "endpoints": [
+        "POST /api/v1/text/status"
+      ],
+      "requests": []
+    },
+    "mentions": {
+      "endpoints": [
+        "POST /api/v1/text/mentions",
+        "GET /api/v1/text/mention-types"
+      ],
+      "requests": []
+    },
+    "word-counter": {
+      "endpoints": [
+        "POST /api/v1/text/stats"
+      ],
+      "requests": []
+    },
+    "text-transform": {
+      "endpoints": [
+        "POST /api/v1/text/transform"
+      ],
+      "requests": []
+    },
+    "snowflake": {
+      "endpoints": [
+        "GET /api/v1/snowflake",
+        "POST /api/v1/snowflake/create",
+        "GET /api/v1/discord/snowflakes/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id"
+      ]
+    },
+    "mock-ids": {
+      "endpoints": [
+        "POST /api/v1/ids/mock"
+      ],
+      "requests": []
+    },
+    "profile-viewer": {
+      "endpoints": [
+        "GET /api/v1/discord/users/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id"
+      ]
+    },
+    "account-age": {
+      "endpoints": [
+        "GET /api/v1/discord/users/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id"
+      ]
+    },
+    "pfp-grabber": {
+      "endpoints": [
+        "GET /api/v1/discord/users/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id"
+      ]
+    },
+    "banner-grabber": {
+      "endpoints": [
+        "GET /api/v1/discord/users/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id"
+      ]
+    },
+    "badge-checker": {
+      "endpoints": [
+        "GET /api/v1/discord/users/:id",
+        "GET /api/v1/badges"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id",
+        "GET https://discord.com/api/v10/api/v1/badges"
+      ]
+    },
+    "server-lookup": {
+      "endpoints": [
+        "GET /api/v1/discord/guilds/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/guilds/:id"
+      ]
+    },
+    "invite-info": {
+      "endpoints": [
+        "GET /api/v1/discord/invites/:code",
+        "GET /api/v1/invites/extract"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/invites/:code"
+      ]
+    },
+    "emoji-downloader": {
+      "endpoints": [
+        "GET /api/v1/discord/emojis/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/emojis/:id"
+      ]
+    },
+    "id-finder": {
+      "endpoints": [
+        "GET /api/v1/discord/snowflakes/:id"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/users/:id"
+      ]
+    },
+    "invite-builder": {
+      "endpoints": [
+        "GET /api/v1/invites/extract",
+        "POST /api/v1/invites/build"
+      ],
+      "requests": []
+    },
+    "invite-images": {
+      "endpoints": [
+        "GET /api/v1/invites/images"
+      ],
+      "requests": []
+    },
+    "embed-builder": {
+      "endpoints": [
+        "POST /api/v1/webhooks/payload",
+        "GET /api/v1/webhooks/limits"
+      ],
+      "requests": []
+    },
+    "rpc-preview": {
+      "endpoints": [
+        "POST /api/v1/webhooks/rpc"
+      ],
+      "requests": []
+    },
+    "permission-calculator": {
+      "endpoints": [
+        "POST /api/v1/permissions",
+        "GET /api/v1/permissions/all"
+      ],
+      "requests": []
+    },
+    "emoji-library": {
+      "endpoints": [
+        "GET /api/v1/emojis",
+        "GET /api/v1/emojis/categories"
+      ],
+      "requests": []
+    },
+    "color-text": {
+      "endpoints": [
+        "POST /api/v1/emoji/color-text"
+      ],
+      "requests": []
+    },
+    "base64": {
+      "endpoints": [
+        "POST /api/v1/base64"
+      ],
+      "requests": []
+    },
+    "url-encoder": {
+      "endpoints": [
+        "POST /api/v1/url"
+      ],
+      "requests": []
+    },
+    "json-tool": {
+      "endpoints": [
+        "POST /api/v1/json"
+      ],
+      "requests": []
+    },
+    "uuid-generator": {
+      "endpoints": [
+        "GET /api/v1/uuid"
+      ],
+      "requests": []
+    },
+    "color-converter": {
+      "endpoints": [
+        "POST /api/v1/color"
+      ],
+      "requests": []
+    },
+    "hex-color-picker": {
+      "endpoints": [
+        "POST /api/v1/color"
+      ],
+      "requests": []
+    },
+    "role-color-preview": {
+      "endpoints": [
+        "POST /api/v1/color"
+      ],
+      "requests": []
+    },
+    "password-generator": {
+      "endpoints": [
+        "POST /api/v1/password"
+      ],
+      "requests": []
+    },
+    "token-inspector": {
+      "endpoints": [
+        "POST /api/v1/token/decode"
+      ],
+      "requests": []
+    },
+    "timestamp-generator": {
+      "endpoints": [
+        "POST /api/v1/timestamp"
+      ],
+      "requests": []
+    },
+    "message-link": {
+      "endpoints": [
+        "GET /api/v1/message-links"
+      ],
+      "requests": []
+    },
+    "markdown-guide": {
+      "endpoints": [
+        "GET /api/v1/markdown"
+      ],
+      "requests": []
+    },
+    "badge-library": {
+      "endpoints": [
+        "GET /api/v1/badges"
+      ],
+      "requests": [
+        "GET https://discord.com/api/v10/api/v1/badges"
+      ]
+    },
+    "vtt-tool": {
+      "endpoints": [
+        "POST /api/v1/vtt"
+      ],
+      "requests": []
+    },
+    "age-tool": {
+      "endpoints": [
+        "POST /api/v1/age"
+      ],
+      "requests": []
+    },
+    "countdown": {
+      "endpoints": [
+        "POST /api/v1/countdown"
+      ],
+      "requests": []
+    },
+    "soundboard": {
+      "endpoints": [
+        "GET /api/v1/sounds"
+      ],
+      "requests": []
+    },
+    "discord-sfx": {
+      "endpoints": [
+        "GET /api/v1/sounds"
+      ],
+      "requests": []
+    },
+    "username-generator": {
+      "endpoints": [
+        "GET /api/v1/generate/usernames"
+      ],
+      "requests": []
+    },
+    "nickname-generator": {
+      "endpoints": [
+        "GET /api/v1/generate/nicknames"
+      ],
+      "requests": []
+    },
+    "bio-generator": {
+      "endpoints": [
+        "GET /api/v1/generate/bio"
+      ],
+      "requests": []
+    },
+    "server-name-generator": {
+      "endpoints": [
+        "GET /api/v1/generate/server"
+      ],
+      "requests": []
+    },
+    "channel-name-generator": {
+      "endpoints": [
+        "GET /api/v1/generate/server",
+        "GET /api/v1/generate/channels"
+      ],
+      "requests": []
+    },
+    "role-name-generator": {
+      "endpoints": [
+        "GET /api/v1/generate/roles"
+      ],
+      "requests": []
+    },
+    "rules-generator": {
+      "endpoints": [
+        "POST /api/v1/generate/rules"
+      ],
+      "requests": []
+    },
+    "welcome-generator": {
+      "endpoints": [
+        "POST /api/v1/generate/welcome"
+      ],
+      "requests": []
+    }
+  }
+}
