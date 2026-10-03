@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npm run docs:openapi && vite",
     "build": "npm run docs:openapi && npm run docs:llms && tsc -b && vite build && vite build --config vite.client.config.ts",
+    "postbuild": "node scripts/postbuild.mjs",
     "build:app": "tsc -b && vite build",
     "build:api": "vite build --config vite.client.config.ts",
     "preview": "vite preview",

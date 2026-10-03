@@ -3,7 +3,7 @@ name: Deploy and release
 # Pushing a `v*` tag deploys that commit and cuts a release. The manual trigger does the same for
 # a version you type, creating the tag itself. The release body is generated from the commits in
 # the release, credited to their authors, with a link back to the deployed site taken from
-# DISTOOLS_CONFIG.
+# DISTOOLS_CONFIG. The built site is pushed to the `gh-pages` branch, which is what Pages serves.
 
 on:
   push:
@@ -22,11 +22,9 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
-# Shares the Pages group with the continuous deploy so the two never publish at once. This one
-# waits rather than cancelling, because it also owns the release.
+# Shares the Pages group with the continuous deploy so the two never push `gh-pages` at once.
+# This one waits rather than cancelling, because it also owns the release.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -57,6 +55,7 @@ jobs:
             echo "version=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
           fi
 
+      # Builds `dist/` as part of the suite, including the `postbuild` script.
       - run: npm run verify
 
       - name: Find the previous release tag
@@ -88,18 +87,14 @@ jobs:
               --target "${{ github.sha }}"
           fi
 
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: release
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist
+          git init -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit -m "Deploy ${{ steps.version.outputs.version }} (${GITHUB_SHA::7})"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

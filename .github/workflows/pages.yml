@@ -5,11 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# The site is published by pushing the built `dist/` to the `gh-pages` branch, so this needs
+# write access to the repository contents.
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
+# Both this workflow and the release workflow publish `gh-pages`, so they share a group and never
+# push at the same time.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -31,20 +33,19 @@ jobs:
       - run: npm run lint
       - run: npm run test:config
       - run: npm run test:api
+
+      # `build` runs `docs:openapi` and `docs:llms` first, then Vite, then the `postbuild` script
+      # that writes `dist/404.html` (the SPA fallback) and `dist/.nojekyll`.
       - run: npm run build
 
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist
+          git init -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit -m "Deploy ${GITHUB_SHA::7}"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

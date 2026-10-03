@@ -106,6 +106,9 @@ if (!exists("index.html")) {
   check("404.html mirrors index.html", () => {
     assert(read("404.html") === read("index.html"), "404.html and index.html differ");
   });
+  check(".nojekyll is present", () => {
+    assert(exists(".nojekyll"), ".nojekyll is missing; Pages would run Jekyll over the output");
+  });
 
   // The point of DISTOOLS_CONFIG is that it reaches the output. Check the two most visible places
   // rather than trusting the build to have substituted the tokens.
