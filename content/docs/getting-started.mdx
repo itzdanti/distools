@@ -1,0 +1,67 @@
+---
+title: Getting started
+description: What the tools do, which ones touch the network, and what to avoid pasting into them.
+---
+
+Every tool is on one page and works the moment the page loads. There is nothing to install,
+no sign-in, and no setting to configure.
+
+## Tools that use the network
+
+Most tools are pure computation: fancy text is string replacement, a snowflake decoder is
+arithmetic, the permission calculator is bitwise maths. Those never touch the network.
+
+A smaller group does make an outbound request, because the data lives on Discord's servers and
+not in your browser. Those tools carry a **network** badge in the corner of their card.
+
+The request contains only the thing you typed — a user ID, a guild ID, an invite code, or an
+emoji ID. Nothing else from the page is attached.
+
+## How a lookup is routed
+
+<Steps>
+  <Step>
+    ### Your own API
+
+    If the site is published with a hosted API configured, the lookup goes there first. Same
+    origin, so no cross-origin question at all.
+  </Step>
+  <Step>
+    ### Discord directly
+
+    Otherwise the browser asks Discord itself. Most of the time this is blocked by Discord's
+    CORS policy, but not always.
+  </Step>
+  <Step>
+    ### A public proxy
+
+    If the browser blocked that, the request is relayed through a public, unauthenticated CORS
+    proxy. This works, and it is also the weakest link: the proxy can see the request. That is
+    why nothing private should go into a lookup field.
+  </Step>
+</Steps>
+
+The tool reports which route answered, so you always know whether a proxy saw your request.
+
+## What Discord will and will not tell you
+
+Worth knowing before you conclude a tool is broken:
+
+- **Invites work.** `discord.gg/whatever` returns the server name, member count, online count
+  and icon, with no token.
+- **Servers by ID usually do not.** `GET /guilds/{id}` answers `401` to anonymous callers as of
+  October 2026. Discord wants a bot token, and this site has none and will never ask you for one.
+- **Users by ID are ambiguous.** `GET /users/{id}` also answers `401`, and deliberately does not
+  say whether that means the account is private or does not exist. The tools report "no public
+  profile" instead of guessing.
+- **CDN images are public.** Avatars, banners, server icons and emoji can be embedded directly.
+
+Where a route is restricted, the tool says so plainly rather than showing a spinner forever.
+
+## Webhooks
+
+A webhook URL is a password. Anyone holding it can post as that webhook.
+
+The two webhook tools send **straight to Discord** from your browser. Nothing is relayed through
+a proxy, and no endpoint in the API accepts a webhook URL at all. Delete the webhook when you
+are done with it.

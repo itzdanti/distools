@@ -1,0 +1,58 @@
+---
+title: Privacy
+description: What this site stores, what it sends, and what it will never ask you for.
+---
+
+The short version: there is nothing to sign up for, nothing is stored, and no tool on this site
+will ask you for your password, your token or your 2FA code.
+
+## What is stored
+
+Nothing. There is no database, no account system and no analytics script. The site sets no
+cookies. The only thing it will ever write to your browser is your theme preference, in
+`localStorage`, and clearing site data removes it.
+
+## What leaves your browser
+
+Two categories of tool send anything at all.
+
+**Lookups.** Tools that fetch a profile, avatar, banner or invite send the one identifier you
+typed — a user ID, a guild ID, an invite code, an emoji ID — to Discord, or to a public CORS
+proxy if Discord blocked the direct call. Nothing else from the page is attached. The tool tells
+you which route answered, so you always know when a third party was involved.
+
+**Webhooks.** The webhook tools post straight to Discord with the URL you pasted. A webhook URL
+is a credential: anyone holding it can post as that webhook. Delete it when you are finished.
+
+## What never leaves your browser
+
+Everything else. Fancy text, snowflake decoding, timestamp conversion, the permission
+calculator, colour shading, the token inspector, emoji resizing and image cropping are all
+computation on data you already have. Open the network tab and watch.
+
+## The token inspector
+
+It decodes the *structure* of a token on your machine: which parts are present, roughly when it
+was issued, what the flags say. It never transmits the token, and it cannot tell you whether a
+token is valid, because that would require sending it.
+
+A genuine Discord support agent will never ask for your password, your token or your 2FA code.
+Nobody will.
+
+## The API
+
+The same rules apply, with two additions.
+
+There is no authentication, because there is nothing to authenticate against. No endpoint
+accepts a token, and **no endpoint accepts a webhook URL at all** — that is why the two webhook
+senders have no API endpoint. If you find an endpoint that will take a webhook URL, it is not
+this API.
+
+The Discord endpoints are the only ones that make an outbound request, and they request exactly
+one thing: the resource you asked for.
+
+## Hosting
+
+The site is a static bundle on GitHub Pages. GitHub serves the files and logs the requests in
+the ordinary way any web host does. There is no application server, no database and no
+third-party analytics embedded in the page.

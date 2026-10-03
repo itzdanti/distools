@@ -1,0 +1,12 @@
+== THIS FILE SHOULD BE EDITED ONLY IF YOU ARE MAKING YOUR OWN SERVICE, AS IT SETS SETTINGS USED BY THE REPOSITORY AND THE SERVICE ITSELF.
+
+service_name: "aki's Discord Tools" == full service name
+short_service_name: "aki's distools" == short service name
+service_deploy_domain: "distools.itzdanti.dev" == domain of your service, can be your own or an .github.io sub-domain, just a visual link that will be used.
+service_repo_link: "https://github.com/itzdanti/distools" == repository link of your service
+service_docs_link: "https://distools.itzdanti.dev/docs" == or "https://{service_deploy_domain}/docs"
+service_support: "distools@itzdanti.dev" == any text here, emails are automatically converted to mailto:address, links will work too.
+license: "aki's Discord Tools License" == license of your service, can be any text.
+privacy_policy: "https://distools.itzdanti.dev/privacy" == link for your privacy policy, if empty there will be no policy button on the page.
+terms_of_service: "https://distools.itzdanti.dev/terms" == link for your terms of service, if empty there will be no terms button on the page.
+takedown_email: "legal@itzdanti.dev" == must be an email, will be used as an "takedown" email.

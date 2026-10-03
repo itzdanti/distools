@@ -1,0 +1,76 @@
+name: Bug report
+description: Something is broken, or a tool behaves unexpectedly.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Please fill in as much as you can — a bug that
+        cannot be reproduced usually cannot be fixed.
+
+        Before you continue: if the affected tool makes a network request and returned `401`, that
+        is Discord's behaviour for anonymous lookups, not a bug. It is explained in the
+        [privacy docs](https://distools.itzdanti.dev/docs/privacy).
+  - type: input
+    id: where
+    attributes:
+      label: Where is the problem?
+      description: The tool name, page, or API endpoint (for example `/api/v1/text/fancy`).
+      placeholder: Fancy Text
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem is it?
+      options:
+        - Broken output or wrong result
+        - The page will not load or crashes
+        - A network lookup fails
+        - A layout or accessibility problem
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What did you do, in order?
+      placeholder: |
+        1. Open the Fancy Text tool
+        2. Type "hello"
+        3. Choose Bold
+        4. Copy the result
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened?
+      description: Include the exact error text or a screenshot if you can.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+      placeholder: Firefox 128 on Windows 11
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues and this is not a duplicate.
+          required: true
+        - label: I did not paste any token, webhook URL, or other secret into this report.
+          required: true

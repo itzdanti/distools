@@ -1,0 +1,50 @@
+name: Tool request
+description: Suggest a new utility for the site.
+title: "[Tool]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. The best requests describe a real, everyday need — the kind of thing
+        you found yourself wanting and could not find without signing up somewhere.
+  - type: input
+    id: name
+    attributes:
+      label: What should it be called?
+      placeholder: Snowflake countdown
+    validations:
+      required: true
+  - type: textarea
+    id: job
+    attributes:
+      label: What does it do?
+      description: One or two sentences. What do you put in, and what do you get out?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it useful?
+      description: Who is it for, and when would they reach for it?
+    validations:
+      required: true
+  - type: dropdown
+    id: network
+    attributes:
+      label: Does it need to contact Discord?
+      description: A tool that can work entirely in the browser must, so that the privacy page stays true.
+      options:
+        - No — it can run entirely in the browser
+        - Yes — it needs to fetch something from Discord
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: existing
+    attributes:
+      label: Does a similar tool already exist?
+      description: Optional. A link to something that does this, if you know of one.
+    validations:
+      required: false

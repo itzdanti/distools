@@ -1,0 +1,48 @@
+{
+  "name": "distools",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run docs:openapi && vite",
+    "build": "npm run docs:openapi && npm run docs:llms && tsc -b && vite build && vite build --config vite.client.config.ts",
+    "build:app": "tsc -b && vite build",
+    "build:api": "vite build --config vite.client.config.ts",
+    "preview": "vite preview",
+    "serve": "node server/serve.mjs",
+    "lint": "oxlint",
+    "docs:openapi": "vite build --ssr scripts/generate-openapi.ts --outDir node_modules/.cache/openapi --logLevel error && node node_modules/.cache/openapi/generate-openapi.js",
+    "docs:llms": "vite build --ssr scripts/generate-llms.ts --outDir node_modules/.cache/llms --logLevel error && node node_modules/.cache/llms/generate-llms.js",
+    "test:config": "vite build --ssr scripts/tests/config.ts --outDir node_modules/.cache/test-config --logLevel error && node node_modules/.cache/test-config/config.js",
+    "test:api": "vite build --ssr scripts/tests/api.ts --outDir node_modules/.cache/test-api --logLevel error && node node_modules/.cache/test-api/api.js",
+    "test:routes": "vite build --ssr scripts/tests/routes.tsx --outDir node_modules/.cache/test-routes --logLevel error && node node_modules/.cache/test-routes/routes.js",
+    "test:dist": "vite build --ssr scripts/tests/dist.ts --outDir node_modules/.cache/test-dist --logLevel error && node node_modules/.cache/test-dist/dist.js",
+    "test:serve": "vite build --ssr scripts/tests/serve.ts --outDir node_modules/.cache/test-serve --logLevel error && node node_modules/.cache/test-serve/serve.js",
+    "tests": "npm run test:config && npm run test:api && npm run test:routes && npm run build && npm run test:dist && npm run test:serve",
+    "verify": "npm run lint && npm run tests",
+    "release:notes": "vite build --ssr scripts/release-notes.ts --outDir node_modules/.cache/release-notes --logLevel error && node node_modules/.cache/release-notes/release-notes.js"
+  },
+  "dependencies": {
+    "@scalar/api-client-react": "^2.0.54",
+    "@tailwindcss/vite": "^4.3.3",
+    "fumadocs-core": "^16.15.18",
+    "fumadocs-mdx": "^15.4.6",
+    "fumadocs-openapi": "^12.1.1",
+    "fumadocs-ui": "^16.15.18",
+    "json-schema-typed": "^8.0.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router": "^7.18.4",
+    "react-router-dom": "^7.18.4",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

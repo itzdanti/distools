@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://distools.itzdanti.dev/docs
+    about: Guides, the API reference, and the privacy page.
+  - name: Support guide
+    url: https://github.com/itzdanti/distools/blob/main/SUPPORT.md
+    about: Where to ask for help and what to include.
+  - name: Report a security issue
+    url: https://github.com/itzdanti/distools/security/policy
+    about: Please report vulnerabilities privately, not as a public issue.

@@ -1,0 +1,112 @@
+---
+title: API
+description: 53 endpoints that mirror the tools, served from the same static site. No key, no rate limit, no user data.
+---
+
+import { ApiReference } from "../../../src/components/ApiPage";
+
+The API is the same code the tools run, exposed as an ES module and as JSON the browser can
+render. It is served by GitHub Pages from this repository, so there is no separate backend to
+deploy and nothing to sign up for. A process that wants a live HTTP API can run the server
+included in the repository (`npm run serve`); GitHub Pages itself only serves files.
+
+## What a static API means here
+
+GitHub Pages serves files. There is no process behind the domain that can read a query string
+and compute an answer. That shapes the whole design, so it is worth being straight about what
+works and what does not.
+
+<Callout title="What a file host can and cannot do">
+  Pages can serve a file, so it answers endpoints that need no parameters. It has no process, so
+  a **parameterised** call such as `?text=hello` cannot be answered there. The handler accepts
+  `GET` with query parameters and `POST` with a JSON body; both work through the client module and
+  against a self-hosted `npm run serve`, and neither works as a bare `fetch` or `curl` to Pages.
+</Callout>
+
+Three ways to call it, in order of how much you should care:
+
+1. **Open the URL.** `distools.itzdanti.dev/api/v1/text/fancy?text=hello&style=bold` renders the
+   JSON in your browser. Good for sharing and for eyeballing a response.
+2. **Import the client.** `https://distools.itzdanti.dev/api/v1/client.js` is a dependency-free
+   ES module that bundles the handler. **This is the supported way to call the API from code**,
+   in a browser or in Node 18+.
+3. **Pre-baked JSON.** The discovery documents are real files, so `curl` returns JSON with the
+   right content type:
+
+```bash
+curl https://distools.itzdanti.dev/api/v1/openapi.json
+curl https://distools.itzdanti.dev/api/v1/index.json
+curl https://distools.itzdanti.dev/api/v1/health.json
+curl https://distools.itzdanti.dev/api/v1/tools.json
+```
+
+A plain `fetch()` of a *parameterised* endpoint from another origin will not work, and it is
+worth understanding why rather than assuming you did something wrong: Pages has no handler for
+that path, so it returns the HTML shell. Import the client and it runs in your own runtime.
+
+## Using the client
+
+```js
+import { api, ApiRequestError, findEndpoint } from "https://distools.itzdanti.dev/api/v1/client.js";
+
+// GET, with query parameters.
+const fancy = await api.get("/text/fancy", { text: "hello", style: "bold" });
+console.log(fancy.data.output);
+
+// Array parameters repeat the key.
+const counter = await api.get("/text/counter", { text: "ab", repeat: 3 });
+
+// Errors carry the status and the payload the endpoint produced.
+try {
+  await api.get("/text/fancy", { style: "nonsense" });
+} catch (error) {
+  if (error instanceof ApiRequestError) console.log(error.status, error.message);
+}
+
+// The shareable URL for any call.
+console.log(api.url("/text/fancy", { text: "hello" }));
+
+// Look endpoints up to build a menu, or to check what a tool supports.
+console.log(findEndpoint("/text/fancy").params);
+```
+
+It runs in Deno and in Node 18+ as well, since it has no DOM dependencies. Nothing it does
+touches this site: the module is the logic, not a proxy.
+
+## Response shape
+
+A successful call returns the result under `data`, alongside enough context to log it:
+
+```json
+{
+  "data": { "output": "𝗵𝗲𝗹𝗹𝗼" },
+  "endpoint": "text.fancy",
+  "method": "GET",
+  "path": "/api/v1/text/fancy"
+}
+```
+
+Errors look like this, with a matching HTTP status:
+
+```json
+{
+  "error": { "message": "\"style\" must be one of: bold, italic, underline.", "status": 400 },
+  "endpoint": "text.fancy"
+}
+```
+
+## Conventions
+
+- **Lists** are comma-separated, or repeat the key. `?items=a,b,c` and `?items=a&items=b` both
+  work. Commas never separate on spaces, so names containing spaces survive.
+- **Booleans** accept `1`, `true`, `yes` and `on`.
+- **Numbers** are validated. An out-of-range value is a `400` with the range in the message,
+  never a silent clamp.
+- **Unknown paths** return `404` and point at the index.
+- **Discord lookups** are the only endpoints that touch the network. Invites work. Guild and
+  user routes answer `401` from Discord without a token; the endpoints pass that through with an
+  explanation instead of hiding it.
+
+## Endpoints
+
+<ApiReference />

@@ -1,0 +1,177 @@
+aki's Discord Tools License
+
+Copyright (c) 2026 akinari (itzdanti) and contributors to aki's Discord Tools.
+All rights reserved except the permissions granted below.
+
+This is not an OSI-approved licence. It is a permissive licence with one
+condition attached, and it is written to be read rather than skimmed.
+
+  SPDX-License-Identifier: LicenseRef-AkiDiscordTools
+
+
+1. Definitions
+--------------
+
+"You" means the individual or legal entity exercising the permissions granted
+by this licence.
+
+"The Project" means aki's Discord Tools, the software, source code, assets,
+documentation and design system distributed under this licence, together with
+any fork of it that keeps this licence.
+
+"The Original Author" means akinari (itzdanti), the creator of The Project.
+
+"Contribution" means any work of authorship that is intentionally submitted
+to The Project for inclusion, including source code, documentation, artwork,
+translations and configuration.
+
+
+2. Copyright notice
+-------------------
+
+The above copyright notice, and this permission notice, must be included in
+all copies or substantial portions of The Project that you distribute. That
+applies whether you ship the source, a compiled bundle, or a fork of either.
+
+You must also keep the visible attribution in the user interface or
+documentation of any distributed copy, unless the work you produce is so
+visibly different that retaining the name would misrepresent its origin. In
+that case, and only in that case, say so plainly instead of implying the
+Original Author endorses your version.
+
+Removing or hiding an attribution you are not entitled to remove is grounds
+for the permissions in section 3 to terminate automatically.
+
+
+3. Permissions granted
+----------------------
+
+Subject to the conditions below, the Original Author and every contributor
+grant you permission to:
+
+  a. Use this software for any purpose, commercial or not.
+
+  b. Modify this software, and adapt it to your own needs.
+
+  c. Copy this software.
+
+  d. Merge it with other software, including software you did not receive
+     this licence for.
+
+  e. Publish the result publicly, including under a different name.
+
+  f. Distribute copies to third parties, by any means and for any price,
+     including as part of a product that also contains other software.
+
+  g. Sublicense the result, so that others may use it under terms of your
+     choosing, including terms more restrictive than these.
+
+  h. Self-host, mirror, or deploy it anywhere you like, including
+     commercially, as long as point (b) below is honoured.
+
+
+4. The one condition: you may not sell it
+-----------------------------------------
+
+You may not sell this software.
+
+"Sell" means any arrangement in which value is exchanged for the software
+itself: a licence fee, a per-seat charge, a subscription for access to it, a
+paid support contract whose subject is this code, or a listing on a
+third-party marketplace.
+
+"Sell" does not mean any of the following, all of which are expressly
+allowed:
+
+  - Charging for a product that merely uses this software, provided this
+    software's source is also published under this licence.
+  - Charging for hosting, operations or managed service around your
+    deployment, provided this software's source is also published under
+    this licence.
+  - Accepting donations.
+  - Charging for support, consulting or custom development work.
+
+The test is whether the customer walks away with the software. If they do,
+and they paid for it rather than for your time, that is selling.
+
+When in doubt, publish the source and give it away.
+
+
+5. Conditions
+-------------
+
+Beyond the attribution requirement in section 2 and the prohibition in
+section 4, there are no conditions. You are not required to:
+
+  - disclose that you used The Project,
+  - contribute changes back,
+  - use the same name,
+  - use the same licence, except as you choose to sublicense under
+    section 3(g),
+  - pay a fee, or
+  - obtain permission before publishing a fork.
+
+You may rename it, rebrand it, and rewrite it into something unrecognisable.
+Please do not misrepresent it as the Original Author's work.
+
+If you publish a fork or a derivative, saying so is a courtesy, not an
+obligation. The requirement is only that you do not imply the opposite.
+
+
+6. Contributions
+----------------
+
+Contributions are licensed under the same terms as The Project, and you
+represent that you have the right to submit them. You keep the copyright in
+your own contributions; you grant the same permissions over them that you
+grant over your own work under this licence.
+
+The Original Author may decline or withdraw any contribution, for any
+reason, including one that changes the licence of the whole Project.
+
+
+7. No warranty
+--------------
+
+This software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and non-infringement.
+
+The contributors are not liable for any claim, damages or other liability,
+whether in an action of contract, tort or otherwise, arising from, out of or
+in connection with this software or its use.
+
+
+8. Termination
+--------------
+
+Your permissions under section 3 end automatically if you breach section 2
+or section 4. They are reinstated if you correct the breach and, for a
+copyright notice removed in error, publish a corrected copy.
+
+
+9. Trademark and branding
+-------------------------
+
+This licence grants no rights in the names, logos, icons or trademarks of
+The Project or its author. "aki's Discord Tools", the site name, the design
+system and any third-party names referenced in the documentation
+(including Discord and its marks) remain the property of their respective
+owners.
+
+Do not publish a fork under the original name or branding in a way that
+suggests it is the Original Author's own release.
+
+
+10. Relationship to other licences
+---------------------------------
+
+Third-party components distributed with The Project may carry their own
+licences, which govern those components. Nothing here grants you rights to
+them beyond what their licences allow, and nothing here restricts you from
+using those components on other terms where their licences permit it.
+
+Where this licence and a third-party component's licence conflict in a way
+that would make your permitted use unlawful, the component's licence
+prevails for that component alone, and The Project's licence continues to
+govern everything else.

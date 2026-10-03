@@ -1,0 +1,111 @@
+---
+title: Contributing
+description: How to add a tool, add an API endpoint, and get a change merged.
+---
+
+Pull requests are welcome, including from people who have never contributed to anything before.
+If you can open a pull request, you can contribute here.
+
+## Getting set up
+
+You need Node 20 or newer.
+
+```bash
+git clone https://github.com/itzdanti/distools.git
+cd distools
+npm install
+npm run dev
+```
+
+That serves the site on `http://localhost:5173`. There is no backend to start and no environment
+file to fill in.
+
+## Adding a tool
+
+A tool is three things: the logic, a registry entry, and a page.
+
+**1. Write the logic in `src/lib/core/`.** Keep it a pure function that takes plain values and
+returns a plain value. No React, no `document`, no `fetch` unless the tool genuinely needs the
+network. This is what lets the same code power the page, the API endpoint and the API client.
+
+```ts
+// src/lib/core/shout.ts
+export function shout(text: string): string {
+  return `${text.toUpperCase()}!`;
+}
+```
+
+**2. Register it in `src/tools/registry.tsx`.** Give it a stable slug, because slugs are URLs
+and appear in the API. Add an icon, a category and a short description that says what it does
+rather than what it is called.
+
+**3. Build the page** in `src/tools/<category>.tsx`, using the shared `<Panel>`, `<Field>` and
+`<Button>` components so it looks like the rest of the site.
+
+## Adding an API endpoint
+
+Endpoints live in `src/lib/core/api.ts` and are declared next to each other with a handler that
+uses the same core module the tool uses.
+
+```ts
+{
+  id: "text.shout",
+  method: "POST",
+  path: "/api/v1/text/shout",
+  group: "Text",
+  summary: "Uppercase text and add an exclamation mark.",
+  description: "Takes text and returns it shouted.",
+  tools: ["shout"],
+  params: [{ name: "text", in: "body", type: "string", required: true, description: "..." }],
+  handler: (input) => ({ output: shout(required(input, "text")) }),
+}
+```
+
+A few rules that the tests will not catch for you:
+
+- **Never accept a webhook URL.** Not in any endpoint, under any name.
+- **Never accept a token.** There is no authenticated mode to put it in.
+- **Use `required`, `int` and `oneOf`.** They produce the standard `400` shape, and they are what
+  keeps invalid input from reaching your logic.
+- **Pure functions only.** The same handler runs in a browser, in Node and in the pre-baked
+  build step. If it reads the clock, pass the time in.
+
+Once it is registered, the endpoint appears automatically in the per-tool API panel, in the
+`/docs/api` reference, in `openapi.json` and in `dist/api/v1/index.json`. There is no list to
+update by hand.
+
+## Before you open the pull request
+
+```bash
+npm run lint         # oxlint, no errors
+npm run test:config  # DISTOOLS_CONFIG still parses
+npm run build        # type-checks and builds
+npm run docs:openapi # regenerate openapi.json if you touched the API
+npm run verify       # all of the above: lint, tests, build, dist and server checks
+```
+
+If you added an endpoint, add it to the smoke tests too. They run the real handler against real
+input and check the error shapes, which is the part most likely to be wrong.
+
+## Releases
+
+Maintainers cut releases, not pull requests. A `v*` tag, or the **Deploy and release** workflow
+run by hand, builds the site and publishes a GitHub release whose notes are the commits since the
+last tag. You do not need to update `CHANGELOG.md`; it lists the project's shape, and the per-release
+notes are generated from commits.
+
+## House rules
+
+- **Match the surrounding code.** Comments explain why, not what. Two-space indent, double
+  quotes, semicolons.
+- **Do not add a dependency without asking.** The bundle is small on purpose.
+- **Do not add a network call to a tool that does not need one.** Pure tools stay pure, and the
+  privacy page stays true.
+- **Keep the copy human.** "Paste an invite link", not "Enter the invite identifier".
+
+## Reporting a bug
+
+Open an issue with what you did, what you expected and what happened instead. A screenshot
+helps. If it only happens on one tool, say which one and which browser.
+
+Security problems: open a private advisory on the repository rather than a public issue.

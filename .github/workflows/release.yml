@@ -1,0 +1,105 @@
+name: Deploy and release
+
+# Pushing a `v*` tag deploys that commit and cuts a release. The manual trigger does the same for
+# a version you type, creating the tag itself. The release body is generated from the commits in
+# the release, credited to their authors, with a link back to the deployed site taken from
+# DISTOOLS_CONFIG.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, including the leading v (e.g. v1.0.0)."
+        required: true
+        type: string
+      comment:
+        description: "Optional line to add after the changelog."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Shares the Pages group with the continuous deploy so the two never publish at once. This one
+# waits rather than cancelling, because it also owns the release.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Resolve the version
+        id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "version=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: npm run verify
+
+      - name: Find the previous release tag
+        id: previous
+        run: |
+          current="${{ steps.version.outputs.version }}"
+          from="$(git tag --sort=-creatordate | grep -vxF "$current" | head -n1 || true)"
+          echo "from=$from" >> "$GITHUB_OUTPUT"
+          echo "previous tag: ${from:-none}"
+
+      - name: Generate release notes
+        env:
+          RELEASE_FROM: ${{ steps.previous.outputs.from }}
+          RELEASE_COMMENT: ${{ inputs.comment }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run release:notes
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release edit "$VERSION" --title "$VERSION" --notes-file release-notes.md
+          else
+            gh release create "$VERSION" \
+              --title "$VERSION" \
+              --notes-file release-notes.md \
+              --target "${{ github.sha }}"
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
