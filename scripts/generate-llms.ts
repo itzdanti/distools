@@ -1,10 +1,10 @@
 /**
- * Writes `public/llms-full.txt`, the single-file version of the documentation.
+ * Writes `public/llms.txt` (the index) and `public/llms-full.txt` (the same text plus every
+ * documentation page) for the llmstxt.org convention.
  *
- * The convention (llmstxt.org) is that `llms.txt` is an index and `llms-full.txt` is everything
- * in one place, for a model to read top to bottom. Generating it means the text cannot drift
- * away from the MDX the site actually renders, and the endpoint list comes from the registry
- * rather than from a hand-kept table.
+ * `llms.txt` is an index and `llms-full.txt` is everything in one place, for a model to read top
+ * to bottom. Generating them means the text cannot drift away from the MDX the site actually
+ * renders, and the endpoint list comes from the registry rather than from a hand-kept table.
  *
  * Run through `npm run docs:llms`, which compiles this file and then runs it.
  */
@@ -73,12 +73,7 @@ for (const group of index.groups) {
   }
 }
 
-const header = `# aki's Discord Tools — full documentation
-
-Everything on one page. Generated from the documentation sources and the endpoint registry, so it
-matches the site.
-
-Site: ${DEFAULT_ORIGIN}
+const header = `Site: ${DEFAULT_ORIGIN}
 API base: ${DEFAULT_ORIGIN}/api/v1
 Client module: ${DEFAULT_ORIGIN}/api/v1/client.js
 Repository: https://github.com/itzdanti/distools
@@ -87,7 +82,12 @@ Repository: https://github.com/itzdanti/distools
 
 `;
 
-const body = `${header}
+const body = `# aki's Discord Tools
+
+The tools, the API reference and the licence in one file. Generated from the documentation sources
+and the endpoint registry, so it matches the site.
+
+${header}
 # Tools
 
 Every tool is at ${DEFAULT_ORIGIN}/tool/<slug> and runs entirely in the browser. Only tools that
@@ -103,9 +103,9 @@ browser, because a webhook URL is a password and must not touch a third party.
 
 ${ENDPOINTS.length} endpoints across ${index.groups.length} groups.
 
-Every endpoint accepts GET with query parameters. That is the form that survives being served as
-a static file. A POST with a JSON body works against a self-hosted copy of the handler, but
-GitHub Pages only serves files, so it never reaches one.
+Every endpoint accepts GET with query parameters and POST with a JSON body. Both run in your own
+runtime through the client module, or over HTTP against a self-hosted copy of the handler. GitHub
+Pages only serves files, so a parameterised call to it returns the HTML shell.
 
 Three ways to call it:
 
@@ -126,6 +126,9 @@ commercially. You may not sell it. Keep the copyright notice.
 
 https://github.com/itzdanti/distools/blob/main/LICENSE
 `;
+
+writeFileSync(resolve(ROOT, "public/llms.txt"), body, "utf8");
+process.stdout.write(`llms.txt: ${ENDPOINTS.length} endpoints, ${body.length} bytes\n`);
 
 const full = `${body}
 ---
